@@ -21,9 +21,12 @@ set -e
 
 case "$2" in
 up)
+	/etc/networklight&
+	/etc/ntpdate-cubian&
 	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
 	;;
 down)
+	/etc/networklight&
 	run-parts --reverse --arg="$1" --arg="$2" /etc/ifplugd/action.d/
 	;;
 *)
