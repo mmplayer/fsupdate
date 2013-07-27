@@ -1,0 +1,15 @@
+--- ifplugd.action.original	2013-07-28 03:22:18.725157474 +0800
++++ ifplugd.action	2013-07-28 03:16:31.279434571 +0800
+@@ -21,9 +21,12 @@
+ 
+ case "$2" in
+ up)
++	/etc/cubian-networklight $1 $2 &
++	/etc/cubian-ntpdate $1 $2 &
+ 	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
+ 	;;
+ down)
++	/etc/cubian-networklight $1 $2 &
+ 	run-parts --reverse --arg="$1" --arg="$2" /etc/ifplugd/action.d/
+ 	;;
+ *)

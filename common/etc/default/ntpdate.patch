@@ -1,0 +1,16 @@
+--- ntpdate.original	2013-07-28 03:20:33.884637598 +0800
++++ ntpdate	2013-07-23 00:18:16.075185253 +0800
+@@ -3,11 +3,11 @@
+ 
+ # Set to "yes" to take the server list from /etc/ntp.conf, from package ntp,
+ # so you only have to keep it in one place.
+-NTPDATE_USE_NTP_CONF=yes
++NTPDATE_USE_NTP_CONF=no
+ 
+ # List of NTP servers to use  (Separate multiple servers with spaces.)
+ # Not used if NTPDATE_USE_NTP_CONF is yes.
+-NTPSERVERS="0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org"
++NTPSERVERS="0.asia.pool.ntp.org 1.asia.pool.ntp.org 2.asia.pool.ntp.org 3.asia.pool.ntp.org 0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org ntp.ubuntu.com"
+ 
+ # Additional options to pass to ntpdate
+ NTPOPTIONS=""

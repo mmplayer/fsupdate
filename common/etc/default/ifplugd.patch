@@ -1,0 +1,12 @@
+--- ifplugd.original	2013-07-28 03:20:20.320570326 +0800
++++ ifplugd	2013-07-23 00:18:16.075185253 +0800
+@@ -11,7 +11,7 @@
+ # INTERFACES, and the udev script starts ifplugd for all interfaces
+ # listed in HOTPLUG_INTERFACES. The special value all starts one
+ # ifplugd for all interfaces being present.
+-INTERFACES=""
+-HOTPLUG_INTERFACES=""
++INTERFACES="all"
++HOTPLUG_INTERFACES="all"
+ ARGS="-q -f -u0 -d10 -w -I"
+ SUSPEND_ACTION="stop"
