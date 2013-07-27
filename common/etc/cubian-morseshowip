@@ -1,9 +1,9 @@
 #!/bin/bash
-ipaddr=`/etc/getip.sh`
-lockfile='/var/lock/morsemsg'
+ipaddr=`/etc/cubian-getip`
+lockfile='/var/lock/cubian-morsemsg'
 if [ "$ipaddr" != '' ];then
     if [ -f $lockfile ];then
         rm -f $lockfile
     fi
-    /etc/morsemsg.sh $ipaddr
+    /etc/cubian-morsemsg $ipaddr
 fi

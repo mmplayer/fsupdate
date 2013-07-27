@@ -1,4 +1,5 @@
 #! /bin/bash
+set -e
 
 echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
 
@@ -17,10 +18,10 @@ if [[ "$hasNetWork" = "1" ]];then
     echo -n 0 > /sys/class/leds/green\:ph20\:led1/brightness
     echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
     sleep 3
-    /etc/morseshowip-reversed.sh
+    /etc/cubian-morseshowip-reversed
     #echo "online"
 else
-    echo -n timer > /sys/class/leds/blue\:ph21\:led2/trigger
+    echo -n timer > /sys/claleds/blue\:ph21\:led2/trigger
     #echo "offline"
 fi
 
