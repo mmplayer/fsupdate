@@ -7,7 +7,7 @@ DHCP_TIMEOUT=60
 if [[ "$2" = "up" ]];
 then
   sleep $DHCP_TIMEOUT
-  /usr/sbin/ntpdate-debian>/dev/null 2>&1
+  /usr/sbin/ntpdate-debian > /dev/null 2>&1
 fi
 
 exit 0

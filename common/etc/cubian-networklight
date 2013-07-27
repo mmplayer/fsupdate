@@ -21,7 +21,7 @@ if [[ "$hasNetWork" = "1" ]];then
     /etc/cubian-morseshowip-reversed
     #echo "online"
 else
-    echo -n timer > /sys/claleds/blue\:ph21\:led2/trigger
+    echo -n timer > /sys/class/leds/blue\:ph21\:led2/trigger
     #echo "offline"
 fi
 
