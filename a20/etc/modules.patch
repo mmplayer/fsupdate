@@ -1,0 +1,20 @@
+--- modules.original	2013-07-27 21:42:22.692018998 +0800
++++ modules	2013-07-27 21:50:16.546368715 +0800
+@@ -4,3 +4,17 @@
+ # at boot time, one per line. Lines beginning with "#" are ignored.
+ # Parameters can be specified after the module name.
+ 
++
++# GPIO
++# gpio_sunxi
++
++# For SATA Support
++sw_ahci_platform
++
++# Display and GPU
++lcd
++hdmi
++ump
++disp
++# mali
++# mali_drm

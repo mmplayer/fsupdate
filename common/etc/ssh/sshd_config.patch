@@ -1,0 +1,26 @@
+--- sshd_config.original	2013-07-27 22:59:24.438937002 +0800
++++ sshd_config	2013-07-27 22:59:51.555071464 +0800
+@@ -2,7 +2,7 @@
+ # See the sshd_config(5) manpage for details
+ 
+ # What ports, IPs and protocols we listen for
+-Port 22
++Port 36000
+ # Use these options to restrict which interfaces/protocols sshd will bind to
+ #ListenAddress ::
+ #ListenAddress 0.0.0.0
+@@ -24,7 +24,7 @@
+ 
+ # Authentication:
+ LoginGraceTime 120
+-PermitRootLogin yes
++PermitRootLogin no
+ StrictModes yes
+ 
+ RSAAuthentication yes
+@@ -85,3 +85,5 @@
+ # PAM authentication, then enable this but set PasswordAuthentication
+ # and ChallengeResponseAuthentication to 'no'.
+ UsePAM yes
++
++MaxStartups 5

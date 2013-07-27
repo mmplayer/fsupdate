@@ -1,0 +1,11 @@
+--- profile.original	2013-07-27 23:04:23.756421247 +0800
++++ profile	2013-07-27 23:05:14.084670788 +0800
+@@ -4,7 +4,7 @@
+ if [ "`id -u`" -eq 0 ]; then
+   PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ else
+-  PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
++ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games"
+ fi
+ export PATH
+ 

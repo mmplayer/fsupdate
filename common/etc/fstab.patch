@@ -1,0 +1,8 @@
+--- fstab.original	2013-07-27 23:35:06.129557076 +0800
++++ fstab	2013-07-23 00:18:16.075185253 +0800
+@@ -1 +1,4 @@
+-# UNCONFIGURED FSTAB FOR BASE SYSTEM
++#<file system>	<mount point>	<type>	<options>	<dump>	<pass>
++/dev/mmcblk0p1	/		ext4	defaults	0	1
++tmpfs	/tmp	tmpfs	defaults	0	0
++tmpfs	/var/tmp	tmpfs	defaults	0	0
