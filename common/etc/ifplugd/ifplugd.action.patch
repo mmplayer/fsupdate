@@ -1,15 +1,18 @@
---- ifplugd.action.original	2013-07-28 03:22:18.725157474 +0800
-+++ ifplugd.action	2013-07-28 03:16:31.279434571 +0800
-@@ -21,9 +21,12 @@
- 
+--- ifplugd.action.original	2013-07-28 08:09:43.870671518 +0800
++++ ifplugd.action	2013-07-28 08:11:36.479229919 +0800
+@@ -22,9 +22,15 @@
  case "$2" in
  up)
+ 	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
++# give sometime for ifupdown to bring the if up/down
++    sleep 5
 +	/etc/cubian-networklight $1 $2 &
 +	/etc/cubian-ntpdate $1 $2 &
- 	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
  	;;
  down)
-+	/etc/cubian-networklight $1 $2 &
  	run-parts --reverse --arg="$1" --arg="$2" /etc/ifplugd/action.d/
++    sleep 5
++	/etc/cubian-networklight $1 $2 &
  	;;
  *)
+ 	echo "ifplugd.action: Incorrect action argument" >&2
