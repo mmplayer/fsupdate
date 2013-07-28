@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          ondemandcpufreq
+# Provides:          cubian-ondemandcpufreq
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
@@ -11,7 +11,7 @@
 # Description: Adjust CPU freqency on system up
 ### END INIT INFO
 
-N=/etc/init.d/ondemandcpufreq
+N=/etc/init.d/cubian-ondemandcpufreq
 
 set -e
 

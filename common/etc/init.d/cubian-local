@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          cubianinit
+# Provides:          cubian-local
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
@@ -11,7 +11,7 @@
 # Description: Other Cubian init scripts
 ### END INIT INFO
 
-N=/etc/init.d/cubianinit
+N=/etc/init.d/cubian-local
 
 set -e
 

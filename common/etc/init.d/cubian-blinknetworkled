@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          blinknetworkled
+# Provides:         cubian-blinknetworkled 
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
@@ -12,7 +12,7 @@
 #	This LED is controlled by ifplugdown later show morse code
 ### END INIT INFO
 
-N=/etc/init.d/blinknetworkled
+N=/etc/init.d/cubian-blinknetworkled
 
 set -e
 

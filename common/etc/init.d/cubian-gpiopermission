@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          gpiopermission
+# Provides:          cubian-gpiopermission
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
@@ -11,7 +11,7 @@
 # Description: /sys/class/gpio belongs to root by default, change it to gpio group
 ### END INIT INFO
 
-N=/etc/init.d/gpiopermission
+N=/etc/init.d/cubian-gpiopermission
 
 set -e
 
