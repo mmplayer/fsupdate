@@ -2,7 +2,7 @@
 set -e
 
 # waiting dhcp finish
-DHCP_TIMEOUT=60
+DHCP_TIMEOUT=30
 
 if [[ "$2" = "up" ]];
 then
