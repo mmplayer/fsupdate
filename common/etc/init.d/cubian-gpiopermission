@@ -5,10 +5,11 @@
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
-# Default-Start: 2 3 4 5    
+# Default-Start:     2 3 4 5    
 # Default-Stop:
 # Short-Description: Fix GPIO permission issue
-# Description: /sys/class/gpio belongs to root by default, change it to gpio group
+# Description:       Some gpio interface belongs to root by default.
+#                    Change it to gpio group.
 ### END INIT INFO
 
 N=/etc/init.d/cubian-gpiopermission
@@ -19,6 +20,8 @@ case "$1" in
   start)
 	chgrp -R gpio /sys/class/gpio
 	chmod -R g+rw /sys/class/gpio
+	find /sys/class/leds -maxdepth 1 -follow -type d | sed "s/\$/\//" | xargs chgrp -R gpio
+	find /sys/class/leds -maxdepth 1 -follow -type d | sed "s/\$/\//" | xargs chmod -R g+rw
 	;;
   *)
 	echo "Usage: $N {start}" >&2
