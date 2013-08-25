@@ -18,10 +18,10 @@ set -e
 
 case "$1" in
   start)
-	echo mmc0 > /sys/class/leds/green\:ph20\:led1/trigger
+	echo -n "mmc0" > /sys/class/leds/green\:ph20\:led1/trigger
 	;;
   stop|reload|restart|force-reload|status)
-    echo timer > /sys/class/leds/green\:ph20\:led1/trigger
+    echo -n "timer" > /sys/class/leds/green\:ph20\:led1/trigger
 	;;
   *)
 	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
