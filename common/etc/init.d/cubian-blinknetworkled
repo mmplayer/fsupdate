@@ -1,15 +1,17 @@
 #! /bin/sh
 
 ### BEGIN INIT INFO
-# Provides:         cubian-blinknetworkled 
+# Provides:          cubian-blinknetworkled 
 # Required-Start:    
 # Required-Stop:
 # Should-Start:      $all
-# Default-Start: 2 3 4 5    
-# Default-Stop: 0 1 6
+# Default-Start:     2 3 4 5    
+# Default-Stop:      0 1 6
 # Short-Description: set blue LED to timer trigger
-# Description: Blink the blue LED on cubieboard when system is going up.
-#	This LED is controlled by ifplugdown later show morse code
+# Description:       Blink the blue LED on cubieboard 
+#                    When system is going up.This LED is 
+#                    controlled by ifplugdown later show 
+#                    morse code
 ### END INIT INFO
 
 N=/etc/init.d/cubian-blinknetworkled
