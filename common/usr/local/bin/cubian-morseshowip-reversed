@@ -1,10 +1,10 @@
 #!/bin/bash
-ipaddr=`/etc/cubian-getip`
+ipaddr=`cubian-getip`
 ipaddr_reversed=`echo $ipaddr | rev`
 lockfile='/var/lock/cubian-morsemsg'
 if [ "$ipaddr" != '' ];then
     if [ -f $lockfile ];then
         rm -f $lockfile
     fi
-    /etc/cubian-morsemsg $ipaddr_reversed
+    cubian-morsemsg $ipaddr_reversed
 fi
