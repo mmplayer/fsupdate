@@ -1,21 +1,12 @@
---- ifplugd.action.original	2013-08-25 14:45:45.002725757 +0800
-+++ ifplugd.action	2013-08-25 14:52:57.532870559 +0800
-@@ -22,15 +22,12 @@
+--- ifplugd.action.origin	2013-08-25 21:00:08.520962184 +0800
++++ ifplugd.action	2013-08-25 21:01:54.405487235 +0800
+@@ -22,6 +22,9 @@
  case "$2" in
  up)
  	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
--# give sometime for ifupdown to bring the if up/down
--    sleep 5
--	/etc/cubian-networklight $1 $2 &
--	/etc/cubian-ntpdate $1 $2 &
 +    at -f /etc/cubian-networklight-wrapper NOW
-+    dhcpdelay=$(date --date='30 seconds' +"%m%d%H%M.%S")
++    dhcpdelay=$(date --date='20 seconds' +"%m%d%H%M.%S")
 +    at -f /usr/sbin/ntpdate-debian -t $dhcpdelay
  	;;
  down)
  	run-parts --reverse --arg="$1" --arg="$2" /etc/ifplugd/action.d/
--    sleep 5
--	/etc/cubian-networklight $1 $2 &
- 	;;
- *)
- 	echo "ifplugd.action: Incorrect action argument" >&2
