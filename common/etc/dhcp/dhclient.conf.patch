@@ -1,0 +1,11 @@
+--- dhclient.conf.original	2013-08-25 16:27:49.109093561 +0800
++++ dhclient.conf	2013-08-25 16:27:59.781146468 +0800
+@@ -25,7 +25,7 @@
+ 	netbios-name-servers, netbios-scope, interface-mtu,
+ 	rfc3442-classless-static-routes, ntp-servers;
+ #require subnet-mask, domain-name-servers;
+-#timeout 60;
++timeout 10;
+ #retry 60;
+ #reboot 10;
+ #select-timeout 5;
