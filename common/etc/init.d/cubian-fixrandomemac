@@ -10,10 +10,10 @@
 # Default-Stop:
 # Short-Description: Fix random emach on cubieboard
 # Description:       Always respect the emac which is setted by script.bin
-#                    Otherwise use the current emach to be static.
-#                    By default the EMAC driver uses a random MAC address each boot
+#                    Otherwise generate a mac address to be used every time
+#
+#                    Refs:
 #                    http://linux-sunxi.org/EMAC
-#                    
 #                    This will cause some problems, see
 #                    https://github.com/cubieplayer/Cubian/issues/63
 #                    https://github.com/cubieplayer/Cubian/issues/47
@@ -56,7 +56,7 @@ case "$1" in
 	    if ! $HAS_SUNXI_EMAC;then
 			setEmac
 			set +e
-			echo "$N set mac address on ${IF} $EMAC"
+			echo "$N set mac address $EMAC on ${IF}"
 			/sbin/ifconfig $IF hw ether $EMAC
 			if [ "$?" != "0" ];then
 				echo "$N error: invalid mac address format? check file $CUBIAN_EMAC"
