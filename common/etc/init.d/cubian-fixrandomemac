@@ -1,15 +1,23 @@
-#! /bin/sh
+#! /bin/bash
 
 ### BEGIN INIT INFO
 # Provides:          cubian-fixrandomemac
-# Required-Start:    $network
+# Required-Start:    $local_fs
 # Required-Stop:
 # Should-Start:   
-# Default-Start:     2 3 4 5    
+# X-Start-Before:    $networking
+# Default-Start:     S    
 # Default-Stop:
 # Short-Description: Fix random emach on cubieboard
 # Description:       Always respect the emac which is setted by script.bin
 #                    Otherwise use the current emach to be static.
+#                    By default the EMAC driver uses a random MAC address each boot
+#                    http://linux-sunxi.org/EMAC
+#                    
+#                    This will cause some problems, see
+#                    https://github.com/cubieplayer/Cubian/issues/63
+#                    https://github.com/cubieplayer/Cubian/issues/47
+#
 ### END INIT INFO
 
 N=/etc/init.d/cubian-fixrandomemac
@@ -17,8 +25,10 @@ N=/etc/init.d/cubian-fixrandomemac
 set -e
 
 SCRIPT_BIN="/boot/script.bin"
-SUNXI_EMAC_FIX="/etc/dhcp/dhclient-enter-hooks.d/fixrandomemac"
+CUBIAN_EMAC="/root/.cubian-emac"
+IF="eth0"
 HAS_SUNXI_EMAC=
+EMAC=
 
 if [ -f $SCRIPT_BIN ];then
 	bin2fex $SCRIPT_BIN 2>/dev/null | grep -qi "^\s*MAC\s*=" && \
@@ -28,33 +38,28 @@ else
 	HAS_SUNXI_EMAC=false
 fi
 
-fixSunxiEmac(){
-currentEmac=$(ifconfig | grep eth0 | awk '{print $5}')
-echo "$N fix random emac using $currentEmac"
-cat > $SUNXI_EMAC_FIX <<END
-#!/bin/bash
-#
-# By default the EMAC driver uses a random MAC address each boot
-# http://linux-sunxi.org/EMAC
-# 
-# This will cause some problems, see
-# https://github.com/cubieplayer/Cubian/issues/63
-# https://github.com/cubieplayer/Cubian/issues/47
-#
-/sbin/ifconfig eth0 hw ether $currentEmac
+setEmac(){
+if [ ! -f $CUBIAN_EMAC ];then
+randemac="c0:b0$(hexdump -n4 -e '/1 ":%02x"' /dev/random)"
+echo "$N generate mac address $emac to $CUBIAN_EMAC"
+cat > $CUBIAN_EMAC <<END
+$randemac
 END
+EMAC="$randemac"
+else
+EMAC=$(cat $CUBIAN_EMAC)
+fi
 }
 
 case "$1" in
   start)
-	    if $HAS_SUNXI_EMAC;then
-			if [ -f $SUNXI_EMAC_FIX ];then
-				echo "$N using emac setting from $SCRIPT_BIN"
-				rm -fv $SUNXI_EMAC_FIX
-			fi
-		else
-			if [ ! -f $SUNXI_EMAC_FIX ];then
-				fixSunxiEmac
+	    if ! $HAS_SUNXI_EMAC;then
+			setEmac
+			set +e
+			echo "$N set mac address on ${IF} $EMAC"
+			/sbin/ifconfig $IF hw ether $EMAC
+			if [ "$?" != "0" ];then
+				echo "$N error: invalid mac address format? check file $CUBIAN_EMAC"
 			fi
 		fi
         ;;
