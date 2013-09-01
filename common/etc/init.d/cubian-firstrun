@@ -22,7 +22,7 @@ FIRST_RUN_FLAG="/root/.firstRun"
 
 case "$1" in
   start)
-	  	if [[ -f $FIRST_RUN_FLAG ]];then
+	  	if [ -f $FIRST_RUN_FLAG ];then
         	if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
         	        if which sshd > /dev/null;then
         	                dpkg-reconfigure openssh-server
