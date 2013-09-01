@@ -4,7 +4,7 @@
  case "$2" in
  up)
  	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
-+    ifdelay=$(date --date='5 seconds' +"%m%d%H%M.%S")
++    ifdelay=$(date --date='10 seconds' +"%m%d%H%M.%S")
 +    at -f /usr/local/bin/cubian-networklight-wrapper -t $ifdelay
 +    dhcpdelay=$(date --date='20 seconds' +"%m%d%H%M.%S")
 +    at -f /usr/sbin/ntpdate-debian -t $dhcpdelay
