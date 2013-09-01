@@ -18,13 +18,18 @@ N=/etc/init.d/cubian-firstrun
 
 set -e
 
+FIRST_RUN_FLAG="/root/.firstRun"
+
 case "$1" in
   start)
-        if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
-                if which sshd > /dev/null;then
-                        dpkg-reconfigure openssh-server
-                fi
-        fi
+	  	if [[ -f $FIRST_RUN_FLAG ]];then
+        	if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
+        	        if which sshd > /dev/null;then
+        	                dpkg-reconfigure openssh-server
+        	        fi
+        	fi
+			rm -f $FIRST_RUN_FLAG
+		fi
         ;;
   *)
         echo "Usage: $N {start}" >&2
