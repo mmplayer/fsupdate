@@ -1,2 +1,2 @@
 #!/bin/sh
-cubian-networklight
+/usr/local/bin/cubian-networklight
