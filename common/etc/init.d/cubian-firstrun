@@ -21,7 +21,9 @@ set -e
 case "$1" in
   start)
         if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
-        dpkg-reconfigure openssh-server
+                if which sshd > /dev/null;then
+                        dpkg-reconfigure openssh-server
+                fi
         fi
         ;;
   *)
