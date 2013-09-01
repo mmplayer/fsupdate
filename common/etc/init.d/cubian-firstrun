@@ -1,0 +1,33 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          cubian-firstrun
+# Required-Start:    $local_fs
+# Required-Stop:
+# Should-Start:
+# Default-Start:     S   
+# Default-Stop:
+# Short-Description: Script to run when cubian first starting
+# Description:       Something needs to be done when cubian is
+#                    starting at first time.
+#                      
+#                    1. regenerate ssh host key
+### END INIT INFO
+
+N=/etc/init.d/cubian-firstrun
+
+set -e
+
+case "$1" in
+  start)
+        if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
+        dpkg-reconfigure openssh-server
+        fi
+        ;;
+  *)
+        echo "Usage: $N {start}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
