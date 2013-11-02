@@ -1,0 +1,38 @@
+--- udevil.conf.original	2013-09-15 01:56:35.223267597 +0000
++++ udevil.conf	2013-09-15 02:47:00.367019903 +0000
+@@ -101,7 +101,7 @@ allowed_groups = *
+ # be permitted to unmount its associated loop device even though internal.
+ # INCLUDING /MNT HERE IS NOT RECOMMENDED.  ALL ALLOWED MEDIA DIRECTORIES
+ # SHOULD BE OWNED AND WRITABLE ONLY BY ROOT.
+-allowed_media_dirs = /media, /run/media/$USER
++allowed_media_dirs = /media, /run/media/$USER, /home/$USER
+ 
+ 
+ # allowed_devices is the first criteria for what block devices users may mount
+@@ -133,7 +133,7 @@ allowed_devices = /dev/*
+ # Some removable esata drives look like internal drives to udevil.  To avoid
+ # this problem, they can be treated as removable with this setting.
+ # WARNING:  SETTING A SYSTEM DEVICE HERE CAN CAUSE SERIOUS SECURITY PROBLEMS.
+-# allowed_internal_devices =
++allowed_internal_devices = /dev/sd*,/dev/nand*
+ 
+ 
+ # allowed_internal_uuids and allowed_internal_uuids_FSTYPE work similarly to
+@@ -220,7 +220,7 @@ default_options_udf       = nosuid, noex
+ default_options_vfat      = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, utf8
+ default_options_msdos     = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
+ default_options_umsdos    = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
+-default_options_ntfs      = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, utf8
++default_options_ntfs      = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, nls=utf8
+ default_options_cifs      = nosuid, noexec, nodev, uid=$UID, gid=$GID
+ default_options_smbfs     = nosuid, noexec, nodev, uid=$UID, gid=$GID
+ default_options_sshfs     = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, nonempty, allow_other
+@@ -241,7 +241,7 @@ default_options_ramfs     = nosuid, noex
+ # and GID.
+ # If you want to forbid remounts, remove 'remount' from here.
+ # WARNING:  OPTIONS HERE CAN CAUSE SERIOUS SECURITY PROBLEMS - CHOOSE CAREFULLY
+-allowed_options           = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, ro, rw, sync, flush, iocharset=*, utf8, remount
++allowed_options           = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, ro, rw, sync, flush, iocharset=*, nls=*, utf8, remount
+ allowed_options_nfs       = nosuid, noexec, nodev, noatime, ro, rw, sync, remount, port=*, rsize=*, wsize=*, hard, proto=*, timeo=*, retrans=*
+ allowed_options_cifs      = nosuid, noexec, nodev, ro, rw, remount, port=*, user=*, username=*, pass=*, password=*, guest, domain=*, uid=$UID, gid=$GID, credentials=*
+ allowed_options_smbfs     = nosuid, noexec, nodev, ro, rw, remount, port=*, user=*, username=*, pass=*, password=*, guest, domain=*, uid=$UID, gid=$GID, credentials=*
