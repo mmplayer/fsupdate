@@ -1,0 +1,5 @@
+#!/bin/bash
+# https://wiki.debian.org/DotFiles
+
+# auto mount/umount removable device
+devmon | logger -t drvmon &
