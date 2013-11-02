@@ -28,6 +28,7 @@ case "$1" in
         	                dpkg-reconfigure openssh-server
         	        fi
         	fi
+			/usr/bin/ajenti-ssl-gen `/bin/hostname` -f
 			rm -f $FIRST_RUN_FLAG
 		fi
         ;;
