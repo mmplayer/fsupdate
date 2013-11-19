@@ -67,12 +67,12 @@ case "$1" in
 		echo "Expanding rootfs..."
 		if do_expand_rootfs;then
 			echo "Exanding rootfs success, reboot automatically"
+			/sbin/insserv cubian-resize2fs
 	    	reboot=true
 		else
 			echo "Exanding rootfs has failed, see previous error messages"
 		fi
 		set -e
-		/sbin/insserv cubian-resize2fs
 		/sbin/insserv -r cubian-firstrun
 		if $reboot;then
 			/sbin/reboot
