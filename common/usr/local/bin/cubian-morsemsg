@@ -2,6 +2,8 @@
 DOT=.
 DASH=-
 LOCK="/var/lock/morsemsg"
+BLUE_LED=/sys/class/leds/blue\:ph21\:led2/
+GREEN_LED=/sys/class/leds/green\:ph20\:led1/
 
 if [ -f $LOCK ];then
     echo "morse message queue is full"
@@ -11,12 +13,12 @@ fi
 touch $LOCK
 
 # init led stat
-echo 0 > /sys/class/leds/blue\:ph21\:led2/brightness
+echo 0 > ${BLUE_LED}/brightness
 
 blink(){
-    echo 1 > /sys/class/leds/blue\:ph21\:led2/brightness
+    echo 1 > ${BLUE_LED}/brightness
     sleep $1
-    echo 0 > /sys/class/leds/blue\:ph21\:led2/brightness
+    echo 0 > ${BLUE_LED}/brightness
     sleep 1
 }
 
