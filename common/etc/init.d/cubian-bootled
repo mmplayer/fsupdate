@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash -e
 
 ### BEGIN INIT INFO
 # Provides:          cubian-bootled
@@ -11,17 +11,24 @@
 # Description:       Blink the green led on cubieboard when system is going down or starting up.
 #	                 Use the green LED light indicates the SD-card when system started up
 ### END INIT INFO
-
+source /lib/lsb/init-functions
 N=/etc/init.d/cubian-bootled
-
-set -e
+LED=/sys/class/leds/green\:ph20\:led1/
 
 case "$1" in
   start)
-	echo -n "mmc0" > /sys/class/leds/green\:ph20\:led1/trigger
+	if [ ! -d $LED ];then
+		log_failure_msg "$LED not exist"
+		exit 2
+	fi
+	echo -n "mmc0" > ${LED}/trigger
 	;;
   stop|reload|restart|force-reload|status)
-    echo -n "timer" > /sys/class/leds/green\:ph20\:led1/trigger
+	if [ ! -d $LED ];then
+		log_failure_msg "$LED not exists"
+		exit 2
+	fi
+    echo -n "timer" > ${LED}/trigger
 	;;
   *)
 	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2

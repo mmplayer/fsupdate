@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash -e
 
 ### BEGIN INIT INFO
 # Provides:          cubian-blinknetworkled 
@@ -14,17 +14,24 @@
 #                    controlled by ifplugdown later show 
 #                    morse code
 ### END INIT INFO
-
+source /lib/lsb/init-functions
 N=/etc/init.d/cubian-blinknetworkled
-
-set -e
+LED=/sys/class/leds/blue\:ph21\:led2/
 
 case "$1" in
   start)
-	echo -n timer > /sys/class/leds/blue\:ph21\:led2/trigger
+	if [ ! -d $LED ];then
+		log_failure_msg "$LED not exist"
+		exit 2
+	fi
+	echo -n timer > ${LED}/trigger
 	;;
   stop|reload|restart|force-reload|status)
-	echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
+	if [ ! -d $LED ];then
+		log_failure_msg "$LED not exists"
+		exit 2
+	fi
+	echo -n 0 > ${LED}/brightness
 	;;
   *)
 	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2

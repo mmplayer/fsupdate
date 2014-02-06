@@ -1,7 +1,17 @@
 #! /bin/bash
 set -e
 
-echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
+BLUE_LED=/sys/class/leds/blue\:ph21\:led2/
+GREEN_LED=/sys/class/leds/green\:ph20\:led1/
+BLUE_LED_BRIGHTNESS=${BLUE_LED}/brightness
+GREEN_LED_BRIGHTNESS=${GREEN_LED}/brightness
+
+if [ ! -d $BLUE_LED ] || [ ! -d $GREEN_LED ];then
+	logger -t "cubian led" "$0 execuate failed, led doesn't exists"
+	exit 2
+fi
+
+echo -n 0 > ${BLUE_LED}/brightness
 
 for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*');do
     hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
@@ -10,20 +20,21 @@ for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0
     fi
 done
 if [[ "$hasNetWork" = "1" ]];then
-    echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
-    echo -n 0 > /sys/class/leds/green\:ph20\:led1/brightness
+    echo -n 0 > $BLUE_LED_BRIGHTNESS
+    echo -n 0 > $GREEN_LED_BRIGHTNESS
     sleep 30
     #indicates the morse code start to begin
-    echo -n 1 > /sys/class/leds/green\:ph20\:led1/brightness
+    echo -n 1 > $GREEN_LED_BRIGHTNESS
     sleep 3
-    echo -n 0 > /sys/class/leds/green\:ph20\:led1/brightness
-    echo -n 0 > /sys/class/leds/blue\:ph21\:led2/brightness
+    echo -n 0 > $GREEN_LED_BRIGHTNESS
+    echo -n 0 > $BLUE_LED_BRIGHTNESS
+
     sleep 3
     /etc/init.d/cubian-bootled start
     /usr/local/bin/cubian-morseshowip-reversed
     #echo "online"
 else
-    echo -n timer > /sys/class/leds/blue\:ph21\:led2/trigger
+    echo -n timer > ${BLUE_LED}/trigger
     #echo "offline"
 fi
 
