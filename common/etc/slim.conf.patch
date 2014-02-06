@@ -1,0 +1,11 @@
+--- slim.conf.original	2014-02-07 07:47:17.003459679 +0800
++++ slim.conf	2014-02-07 07:47:47.707611941 +0800
+@@ -82,7 +82,7 @@ reboot_msg         The system is rebooti
+ 
+ # current theme, use comma separated list to specify a set to 
+ # randomly choose from
+-current_theme       debian-joy
++current_theme       theme-current
+ 
+ # Lock file
+ lockfile            /var/run/slim.lock
