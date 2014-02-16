@@ -17,7 +17,7 @@ N=/etc/init.d/cubian-resize2fs
 
 case "$1" in
   start)
-	    /sbin/resize2fs /dev/root &&
+	    /sbin/resize2fs /dev/mmcblk0p1 &&
 		/sbin/insserv -r cubian-resize2fs &&
 		rm $N
         ;;
