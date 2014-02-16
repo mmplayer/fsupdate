@@ -1,6 +1,6 @@
 --- modules.original	2013-07-27 22:33:06.279111338 +0800
 +++ modules	2013-07-27 22:34:08.655420640 +0800
-@@ -4,3 +4,10 @@
+@@ -4,3 +4,13 @@
  # at boot time, one per line. Lines beginning with "#" are ignored.
  # Parameters can be specified after the module name.
  
@@ -11,3 +11,6 @@
 +# GPU
 +ump
 +mali
++
++# Multimedia
++sunxi_cedar_mod
