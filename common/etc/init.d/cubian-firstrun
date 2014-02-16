@@ -57,11 +57,10 @@ return 0
 case "$1" in
   start)
 	    reboot=false
-        if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
-                if which sshd > /dev/null;then
-					/bin/rm -rf /etc/ssh/ssh_host_*
-					/usr/bin/ssh-keygen -A
-                fi
+        if which sshd > /dev/null;then
+			echo "Regenerate SSH host keys..."
+			/bin/rm -rf /etc/ssh/ssh_host_*
+			/usr/bin/ssh-keygen -A
         fi
 		/usr/bin/ajenti-ssl-gen `/bin/hostname` -f
 		set +e
