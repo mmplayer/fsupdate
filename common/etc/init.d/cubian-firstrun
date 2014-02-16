@@ -59,7 +59,8 @@ case "$1" in
 	    reboot=false
         if ! ls /etc/ssh/ssh_host_* > /dev/null 2>&1;then
                 if which sshd > /dev/null;then
-                        dpkg-reconfigure openssh-server
+					/bin/rm -rf /etc/ssh/ssh_host_*
+					/usr/bin/ssh-keygen -A
                 fi
         fi
 		/usr/bin/ajenti-ssl-gen `/bin/hostname` -f
