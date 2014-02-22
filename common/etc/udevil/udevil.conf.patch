@@ -1,5 +1,5 @@
---- udevil.conf.original	2013-09-15 01:56:35.223267597 +0000
-+++ udevil.conf	2013-09-15 02:47:00.367019903 +0000
+--- udevil.conf.original	2014-02-22 21:35:36.030308548 +0800
++++ udevil.conf	2014-02-22 21:41:01.859924249 +0800
 @@ -101,7 +101,7 @@ allowed_groups = *
  # be permitted to unmount its associated loop device even though internal.
  # INCLUDING /MNT HERE IS NOT RECOMMENDED.  ALL ALLOWED MEDIA DIRECTORIES
@@ -18,11 +18,17 @@
  
  
  # allowed_internal_uuids and allowed_internal_uuids_FSTYPE work similarly to
-@@ -220,7 +220,7 @@ default_options_udf       = nosuid, noex
- default_options_vfat      = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, utf8
- default_options_msdos     = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
- default_options_umsdos    = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
+@@ -217,10 +217,10 @@ default_options_file      = nosuid, noex
+ # mount iso9660 with 'ro' to prevent mount read-only warning
+ default_options_iso9660   = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, ro, utf8
+ default_options_udf       = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID
+-default_options_vfat      = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, utf8
+-default_options_msdos     = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
+-default_options_umsdos    = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID
 -default_options_ntfs      = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, utf8
++default_options_vfat      = nosuid, noexec, nodev, noatime, fmask=0000, dmask=0000, uid=$UID, gid=$GID, utf8
++default_options_msdos     = nosuid, noexec, nodev, noatime, fmask=0000, dmask=0000, uid=$UID, gid=$GID
++default_options_umsdos    = nosuid, noexec, nodev, noatime, fmask=0000, dmask=0000, uid=$UID, gid=$GID
 +default_options_ntfs      = nosuid, noexec, nodev, noatime, uid=$UID, gid=$GID, nls=utf8
  default_options_cifs      = nosuid, noexec, nodev, uid=$UID, gid=$GID
  default_options_smbfs     = nosuid, noexec, nodev, uid=$UID, gid=$GID
@@ -32,7 +38,7 @@
  # If you want to forbid remounts, remove 'remount' from here.
  # WARNING:  OPTIONS HERE CAN CAUSE SERIOUS SECURITY PROBLEMS - CHOOSE CAREFULLY
 -allowed_options           = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, ro, rw, sync, flush, iocharset=*, utf8, remount
-+allowed_options           = nosuid, noexec, nodev, noatime, fmask=0022, dmask=0022, uid=$UID, gid=$GID, ro, rw, sync, flush, iocharset=*, nls=*, utf8, remount
++allowed_options           = nosuid, noexec, nodev, noatime, fmask=*, dmask=*, uid=$UID, gid=$GID, ro, rw, sync, flush, iocharset=*, nls=*, utf8, remount
  allowed_options_nfs       = nosuid, noexec, nodev, noatime, ro, rw, sync, remount, port=*, rsize=*, wsize=*, hard, proto=*, timeo=*, retrans=*
  allowed_options_cifs      = nosuid, noexec, nodev, ro, rw, remount, port=*, user=*, username=*, pass=*, password=*, guest, domain=*, uid=$UID, gid=$GID, credentials=*
  allowed_options_smbfs     = nosuid, noexec, nodev, ro, rw, remount, port=*, user=*, username=*, pass=*, password=*, guest, domain=*, uid=$UID, gid=$GID, credentials=*
