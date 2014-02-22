@@ -1,7 +1,0 @@
---- inittab.original	2013-07-27 23:35:29.205671500 +0800
-+++ inittab	2013-07-23 00:18:16.075185253 +0800
-@@ -67,3 +67,4 @@
- #
- #T3:23:respawn:/sbin/mgetty -x0 -s 57600 ttyS3
- 
-+T0:2345:respawn:/sbin/getty -L ttyS0 115200 vt100
