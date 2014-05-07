@@ -19,6 +19,10 @@ N=/etc/init.d/cubian-firstrun
 
 set -e
 
+screen_print () {
+	printf "$1" > /dev/tty0
+}
+
 do_expand_rootfs(){
 	device="/dev/mmcblk0"
 	root_part=$(/bin/readlink /dev/root)
@@ -57,24 +61,37 @@ return 0
 case "$1" in
   start)
 	    reboot=false
+		screen_print "Preparing to configure system. Do not turn off the power \n"
+		sleep 1
+		screen_print "\n"
+		screen_print " * Regenerating SSH host keys, it may take a while"
         if which sshd > /dev/null;then
 			echo "Regenerate SSH host keys..."
 			/bin/rm -rf /etc/ssh/ssh_host_*
 			/usr/bin/ssh-keygen -A
         fi
+		screen_print "........ok\n"
+		sleep 1
+		screen_print " * Regenerating ajenti SSL keys"
 		/usr/bin/ajenti-ssl-gen `/bin/hostname` -f
+		screen_print "........ok\n"
+		sleep 1
 		set +e
+		screen_print " * Expanding file system to fit your SD-card"
 		echo "Expanding rootfs..."
 		if do_expand_rootfs;then
 			echo "Exanding rootfs success, reboot automatically"
 			/sbin/insserv cubian-resize2fs
+			screen_print "........ok\n"
 	    	reboot=true
 		else
 			echo "Exanding rootfs has failed, see previous error messages"
+			screen_print "........fail\n"
 		fi
 		set -e
 		/sbin/insserv -r cubian-firstrun
 		if $reboot;then
+			screen_print "Rebooting, please wait...\n"
 			/sbin/reboot
 		fi
         ;;
