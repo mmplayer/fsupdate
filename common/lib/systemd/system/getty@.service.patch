@@ -5,7 +5,7 @@
  [Service]
  Environment=TERM=linux
 -ExecStart=-/sbin/agetty %I 38400
-+ExecStart=-/sbin/cubian-agetty %I 38400
++ExecStart=-/usr/sbin/cubian-agetty %I 38400
  Restart=always
  RestartSec=0
  UtmpIdentifier=%I
