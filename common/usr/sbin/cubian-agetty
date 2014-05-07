@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ $1 = "tty2" ];then
+  # don't clean screen on tty2 Alt+F2
+  exec /sbin/agetty $@ --noclear
+else
+  exec /sbin/agetty $@
+fi

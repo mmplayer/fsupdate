@@ -1,0 +1,18 @@
+--- getty@.service.original	2014-05-04 21:07:19.542108243 +0000
++++ getty@.service	2014-05-07 21:38:26.437676570 +0000
+@@ -17,14 +17,14 @@ Before=getty.target
+ 
+ [Service]
+ Environment=TERM=linux
+-ExecStart=-/sbin/agetty %I 38400
++ExecStart=-/sbin/cubian-agetty %I 38400
+ Restart=always
+ RestartSec=0
+ UtmpIdentifier=%I
+ TTYPath=/dev/%I
+ TTYReset=yes
+ TTYVHangup=yes
+-TTYVTDisallocate=yes
++TTYVTDisallocate=no
+ KillMode=process
+ IgnoreSIGPIPE=no
