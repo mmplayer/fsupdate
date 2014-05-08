@@ -19,9 +19,9 @@ screen_print "
 screen_print "\n"
 screen_print "\n"
 screen_print "1. Default username,password is cubie/cubie\n"
-screen_print "2. Default SSH port 36000\n"
-screen_print "3. Web admin URL https://${ip}:8000,login with root/admin\n"
-screen_print "4. Verbose boot or shutdown message Alt+F2\n"
+screen_print "2. Default SSH port is 36000\n"
+screen_print "3. Web admin URL is https://${ip}:8000,Please login with root/admin\n"
+screen_print "4. For Verbose boot, press Alt+F2\n"
 screen_print "5. For help, visit http://cubian.org\n"
 }
 
