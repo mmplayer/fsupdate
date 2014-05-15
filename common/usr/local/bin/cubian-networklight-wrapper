@@ -1,1 +1,5 @@
+#!/bin/sh
+logger -t "networklight" "wait 10 seconds for device ready `date +"%m%d%H%M.%S"`"
+sleep 10
+logger -t "networklight" "start at `date +"%m%d%H%M.%S"`"
 /usr/local/bin/cubian-networklight
