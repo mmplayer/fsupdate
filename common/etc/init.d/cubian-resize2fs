@@ -13,13 +13,19 @@
 
 set -e
 
+screen_print(){
+printf "$1" > /dev/tty0
+}
+
 N=/etc/init.d/cubian-resize2fs
 
 case "$1" in
   start)
+		screen_print "Resizing partitions, it may take a while\n"
 	    /sbin/resize2fs /dev/mmcblk0p1 &&
 		/sbin/insserv -r cubian-resize2fs &&
 		rm $N
+		screen_print "........ok\n"
         ;;
   *)
         echo "Usage: $N {start}" >&2

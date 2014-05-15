@@ -7,6 +7,7 @@ printf "$1" > /dev/tty0
 prompt_firstrun(){
 #clear terminal
 local ip=$(/usr/local/bin/cubian-getip)
+ip=${ip:-YOUR_IP_ADDRESS}
 screen_print "\033[2J\033[1;1H"
 screen_print "
  __    __   __      
@@ -22,7 +23,8 @@ screen_print "1. Default username,password is cubie/cubie\n"
 screen_print "2. Default SSH port is 36000\n"
 screen_print "3. Web admin URL is https://${ip}:8000,Please login with root/admin\n"
 screen_print "4. For Verbose boot, press Alt+F2\n"
-screen_print "5. For help, visit http://cubian.org\n"
+screen_print "5. Install to NAND. run \"sudo cubian-nandinstall\"\n"
+screen_print "6. For help, visit http://cubian.org\n"
 }
 
 if [ -f /root/.firstRun ];then
