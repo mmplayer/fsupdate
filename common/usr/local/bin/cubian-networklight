@@ -26,11 +26,10 @@ done
 set -e
 
 if [[ "$hasNetWork" = "1" ]];then
-    logger -t "networklight" "IP address `/usr/local/bin/cubian-getip`"
     echo -n 0 > $BLUE_LED_BRIGHTNESS
     echo -n 0 > $GREEN_LED_BRIGHTNESS
     logger -t "networklight" "wait 20 seconds let user prepare the pen"
-    sleep 20
+    sleep 30
     #indicates the morse code start to begin
     echo -n 1 > $GREEN_LED_BRIGHTNESS
     sleep 3
@@ -39,6 +38,7 @@ if [[ "$hasNetWork" = "1" ]];then
 
     sleep 3
     logger -t "networklight" "start show ip address by morse code through led"
+    logger -t "networklight" "IP address `/usr/local/bin/cubian-getip`"
     /etc/init.d/cubian-bootled start
     /usr/local/bin/cubian-morseshowip-reversed
 else
