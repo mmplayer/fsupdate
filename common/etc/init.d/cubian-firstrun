@@ -23,21 +23,26 @@ screen_print () {
 	printf "$1" > /dev/tty0
 }
 
+log(){
+	echo "$1"
+	/usr/bin/logger -t "firstrun" "$1"
+}
+
 do_expand_rootfs(){
 	device="/dev/mmcblk0"
 	root_part=$(/bin/readlink /dev/root)
 	part_num=${root_part#mmcblk0p}
 	if [ "$part_num" = "$root_part" ];then
-		echo "Failed to expand rootfs, must be run on a SD card"
+		log "Failed to expand rootfs, must be run on a SD card"
 		return 1
 	fi
 	if [ "$part_num" -ne "1" ];then
-		echo "Failed to expand rootfs, customed partition table is not supported"
+		log "Failed to expand rootfs, customed partition table is not supported"
 		return 2
 	fi
 	last_part_num=$(/sbin/parted ${device} -ms unit s p | tail -n 1 | cut -f 1 -d:)
 	if [ "$last_part_num" != "$part_num" ];then
-		echo "Failed to expand rootfs, /dev/root is not the last partition"
+		log "Failed to expand rootfs, /dev/root is not the last partition"
 		return 3
 	fi
 	part_start=$(parted ${device} -ms unit s p | grep "^${part_num}" | cut -f 2 -d:)
@@ -66,7 +71,7 @@ case "$1" in
 		screen_print "\n"
 		screen_print " * Regenerating SSH host keys, it may take a while"
         if which sshd > /dev/null;then
-			echo "Regenerate SSH host keys..."
+			log "Regenerate SSH host keys..."
 			/bin/rm -rf /etc/ssh/ssh_host_*
 			/usr/bin/ssh-keygen -A
         fi
@@ -78,14 +83,14 @@ case "$1" in
 		sleep 1
 		set +e
 		screen_print " * Expanding file system to fit your SD-card"
-		echo "Expanding rootfs..."
+		log "Expanding rootfs..."
 		if do_expand_rootfs;then
-			echo "Exanding rootfs success, reboot automatically"
+			log "Exanding rootfs success, reboot automatically"
 			/sbin/insserv cubian-resize2fs
 			screen_print "........ok\n"
 	    	reboot=true
 		else
-			echo "Exanding rootfs has failed, see previous error messages"
+			log "Exanding rootfs has failed, see previous error messages"
 			screen_print "........fail\n"
 		fi
 		set -e
