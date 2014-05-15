@@ -7,22 +7,30 @@ BLUE_LED_BRIGHTNESS=${BLUE_LED}/brightness
 GREEN_LED_BRIGHTNESS=${GREEN_LED}/brightness
 
 if [ ! -d $BLUE_LED ] || [ ! -d $GREEN_LED ];then
-	logger -t "cubian led" "$0 execuate failed, led doesn't exists"
+	logger -t "led" "$0 execuate failed, led doesn't exists"
 	exit 2
 fi
 
 echo -n 0 > ${BLUE_LED}/brightness
 
+set +e
 for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*');do
     hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
     if [[ "$hasNetWork" = "1" ]];then
+        logger -t "networklight" "network interface $interface online"
         break
+    else
+        logger -t "networklight" "network interface $interface offline"
     fi
 done
+set -e
+
 if [[ "$hasNetWork" = "1" ]];then
+    logger -t "networklight" "IP address `/usr/local/bin/cubian-getip`"
     echo -n 0 > $BLUE_LED_BRIGHTNESS
     echo -n 0 > $GREEN_LED_BRIGHTNESS
-    sleep 30
+    logger -t "networklight" "wait 20 seconds let user prepare the pen"
+    sleep 20
     #indicates the morse code start to begin
     echo -n 1 > $GREEN_LED_BRIGHTNESS
     sleep 3
@@ -30,12 +38,12 @@ if [[ "$hasNetWork" = "1" ]];then
     echo -n 0 > $BLUE_LED_BRIGHTNESS
 
     sleep 3
+    logger -t "networklight" "start show ip address by morse code through led"
     /etc/init.d/cubian-bootled start
     /usr/local/bin/cubian-morseshowip-reversed
-    #echo "online"
 else
     echo -n timer > ${BLUE_LED}/trigger
-    #echo "offline"
+    logger -t "networklight" "all the interfaces are offline"
 fi
 
 exit 0
