@@ -1,2 +1,83 @@
-#!/bin/sh
-/usr/sbin/ntpdate-debian
+#! /bin/bash
+set -e
+
+# Warning:
+# this program is designed exec by at command, don't use STDOUT in the program
+# STDOUT,STDERROR will be mailed to /var/mail/
+
+LOCKFILE="/var/lock/cubian-ntpdate"
+INTERFACE=${1:-unknown}
+ACTION=${2:-unknown}
+DELAY=${3:-0}
+COUNT=1
+MAX_AVG=0.8
+
+if [ -f $LOCKFILE ];then
+	exit 0
+fi
+
+log(){
+logger -t "networktime" "$1"
+}
+
+get_loadavg(){
+cat /proc/loadavg | awk '{print $1}'
+}
+
+loadavg_fit(){
+local avg=$(get_loadavg)
+local ret=$(expr $avg < $MAX_AVG)
+if [ "$ret" = "1" ];then
+	return 0
+fi
+return 1
+}
+
+do_ntpdate(){
+log "start probe interfaces"
+for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*');do
+    hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
+    if [[ "$hasNetWork" = "1" ]];then
+        log "network interface $interface online"
+        break
+    else
+        log "network interface $interface offline"
+    fi
+done
+if [[ "$hasNetWork" = "1" ]];then
+	local avg=$(get_loadavg)
+	if expr $avg \< $MAX_AVG > /dev/null;then
+		local ntpdateLog=$(/usr/sbin/ntpdate-debian 2>&1)
+		local ret="$?"
+		echo ntpdateLog | logger -t "networktime"
+		if [ "$ret" = "0" ];then
+    	    log "success"
+			touch $LOCKFILE
+		else
+    	    log "fail, ntpdate error, see log, process deferred"
+		fi
+	else
+    	log "system is busy, current $avg maximium $MAX_AVG, process deferred"
+	fi
+else
+    log "fail, no network connection, process deferred"
+fi
+}
+
+log "triggered by $INTERFACE $ACTION"
+log "wait interfaces ready, waiting for $DELAY seconds"
+
+while 1;do
+	DELAY=$(expr $DELAY \* $COUNT)
+	log "wait $DELAY seconds"
+	sleep $DELAY
+	set +e
+	log "execute ntpdate"
+	do_ntpdate
+	set -e
+	if [ -f $LOCKFILE ];then
+		break
+	fi
+	COUNT=$(expr $COUNT \* 2)
+done
+exit 0
