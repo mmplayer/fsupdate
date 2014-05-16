@@ -40,7 +40,7 @@ if [[ "$hasNetWork" = "1" ]];then
 	if expr $avg \< $MAX_AVG > /dev/null;then
 		local ntpdateLog=$(/usr/sbin/ntpdate-debian 2>&1)
 		local ret="$?"
-		echo ntpdateLog | logger -t "networktime"
+		echo $ntpdateLog | logger -t "networktime"
 		if [ "$ret" = "0" ];then
     	    log "success"
 			touch $LOCKFILE
@@ -56,7 +56,7 @@ fi
 }
 
 log "triggered by $INTERFACE $ACTION"
-log "wait interfaces ready, waiting for $DELAY seconds"
+log "wait interfaces ready"
 
 while true;do
 	DELAY=$(expr $DELAY \* $COUNT)
