@@ -4,8 +4,8 @@
  case "$2" in
  up)
  	run-parts --arg="$1" --arg="$2" /etc/ifplugd/action.d/
-+	echo "/usr/local/bin/cubian-networklight $1 $2 10" | at now
-+	echo "/usr/sbin/ntpdate-debian" | at now
++	echo "/usr/lib/cubian/cubian-networklight $1 $2 10" | at now
++	echo "/usr/lib/cubian/cubian-ntpdate $1 $2 20" | at now
  	;;
  down)
  	run-parts --reverse --arg="$1" --arg="$2" /etc/ifplugd/action.d/

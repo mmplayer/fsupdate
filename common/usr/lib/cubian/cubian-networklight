@@ -53,9 +53,9 @@ if [[ "$hasNetWork" = "1" ]];then
 
     sleep 3
     log "start show ip address by morse code through led"
-    log "IP address `/usr/local/bin/cubian-getip`"
+    log "IP address `/usr/lib/cubian/cubian-getip`"
     /etc/init.d/cubian-bootled start
-    /usr/local/bin/cubian-morseshowip-reversed
+    /usr/lib/cubian/cubian-morseshowip-reversed
 else
     echo -n timer > ${BLUE_LED}/trigger
     log "all the interfaces are offline"

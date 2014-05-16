@@ -6,7 +6,7 @@ printf "$1" > /dev/tty0
 
 prompt_firstrun(){
 #clear terminal
-local ip=$(/usr/local/bin/cubian-getip)
+local ip=$(/usr/lib/cubian/cubian-getip)
 ip=${ip:-YOUR_IP_ADDRESS}
 screen_print "\033[2J\033[1;1H"
 screen_print "

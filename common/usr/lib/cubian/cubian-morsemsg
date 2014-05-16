@@ -22,7 +22,7 @@ blink(){
     sleep 1
 }
 
-CODES=(`/usr/local/bin/cubian-morseencode $1`)
+CODES=(`/usr/lib/cubian/cubian-morseencode $1`)
 for CODE in "${CODES[@]}";do
     ATOMS=($(echo $CODE | sed 's/\(.\)/\1 /g'))
     for ATOM in "${ATOMS[@]}";do
