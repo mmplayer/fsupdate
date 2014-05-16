@@ -24,15 +24,6 @@ get_loadavg(){
 cat /proc/loadavg | awk '{print $1}'
 }
 
-loadavg_fit(){
-local avg=$(get_loadavg)
-local ret=$(expr $avg < $MAX_AVG)
-if [ "$ret" = "1" ];then
-	return 0
-fi
-return 1
-}
-
 do_ntpdate(){
 log "start probe interfaces"
 for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*');do
@@ -67,7 +58,7 @@ fi
 log "triggered by $INTERFACE $ACTION"
 log "wait interfaces ready, waiting for $DELAY seconds"
 
-while 1;do
+while true;do
 	DELAY=$(expr $DELAY \* $COUNT)
 	log "wait $DELAY seconds"
 	sleep $DELAY
