@@ -1,24 +1,92 @@
 #!/bin/sh
 
+. /usr/lib/cubian/cubian-functions
+
+# check package every 8 hours
+CHECK_WAIT=28800
+POSTPONE_TIME=30
+
+log(){
+logger "motdpackage" "$1"
+}
+
 get_package_total_count(){
-dpkg --list | wc --lines
+dpkg --list | wc --lines 2>&1
 }
 
 get_package_upgradable_count(){
-apt-get upgrade --just-print | grep Inst | wc --lines
+apt-get upgrade --just-print | grep Inst | wc --lines 2>&1
 }
 
 get_package_upgradable_security_count(){
-apt-get upgrade --print-uris -y | grep security.debian.org | wc --lines
+apt-get upgrade --print-uris -y | grep security.debian.org | wc --lines 2>&1
 }
 
-total=$(get_package_total_count)
-upgrade=$(get_package_upgradable_count)
-security=$(get_package_upgradable_security_count)
+has_kernel_update(){
+apt-get upgrade --just-print | grep linux-image 2>&1
+}
 
-cat >>/var/run/motd.dynamic<<EOF
+postpone(){
+POSTPONE_TIME=$(expr $POSTPONE_TIME \* 2)
+log "Wait for $POSTPONE_TIME seconds"
+sleep $POSTPONE_TIME
+generateMotdPackageInfo
+}
 
-$total packages are installed.
-$upgrade packages can be updated.
-$security updates are security updates.
+generateMotdPackageInfo(){
+log "Generate motd package info"
+local motd="/etc/motd.package"
+if ! cubian_loadavg_fine;then
+  log "System is busy, load average is higher than $CUBIAN_LOADAVG_TOLERACE"
+  postpone
+else
+  local total=$(get_package_total_count)
+  if [ $? -eq 0 ];then
+cat > $motd <<EOF
+ Until $(date)
+
+ $total packages are installed.
 EOF
+  upgrade=$(get_package_upgradable_count)
+  if [ $? -eq 0 ];then
+    echo " $upgrade packages can be updated." >> $motd
+  else
+    log $upgrade
+    log "An error occured while running get_package_upgradable_count"
+  fi
+  security=$(get_package_upgradable_security_count)
+  if [ $? -eq 0 ];then
+    echo " $security updates are security updates." >> $motd
+  else
+    log $security
+    log "An error occured while running get_package_upgradable_security_count"
+  fi
+  kernel=$(has_kernel_update)
+  if [ $? -eq 0 ];then
+    echo " kernel is upgradable." >> $motd
+  else
+    if [ -n "$kernel" ];then
+        log "An error occured while running has_kernel_update"
+        log $kernel
+    fi
+  fi
+  echo "" >> $motd
+  POSTPONE_TIME=30
+  # trigger regerate motd
+  log "regerate motd"
+  run-parts /etc/update-motd.d/
+  log "success"
+  else
+    log $total
+    log "An error occured while running get_package_total_count"
+    postpone
+  fi
+fi
+}
+
+while true;do
+log "Start check motd package info"
+generateMotdPackageInfo
+log "Wait $CHECK_WAIT seconds for next check"
+sleep $CHECK_WAIT
+done

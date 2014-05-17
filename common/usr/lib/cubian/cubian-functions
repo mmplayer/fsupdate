@@ -1,0 +1,30 @@
+#!/bin/bash
+
+CUBIAN_LOADAVG_TOLERACE=0.8
+
+cubian_get_loadavg(){
+cat /proc/loadavg | awk '{print $1}'
+}
+
+cubian_loadavg_lt(){
+local avg=$(cubian_get_loadavg)
+if expr $avg \< $1 > /dev/null;then
+return 0
+fi
+return 1
+}
+
+cubian_loadavg_gt(){
+local avg=$(cubian_get_loadavg)
+if expr $avg \> $1 > /dev/null;then
+return 0
+fi
+return 1
+}
+
+cubian_loadavg_fine(){
+if cubian_loadavg_lt $CUBIAN_LOADAVG_TOLERACE;then
+return 0
+fi
+return 1
+}
