@@ -1,0 +1,24 @@
+#!/bin/sh
+
+get_package_total_count(){
+dpkg --list | wc --lines
+}
+
+get_package_upgradable_count(){
+apt-get upgrade --just-print | grep Inst | wc --lines
+}
+
+get_package_upgradable_security_count(){
+apt-get upgrade --print-uris -y | grep security.debian.org | wc --lines
+}
+
+total=$(get_package_total_count)
+upgrade=$(get_package_upgradable_count)
+security=$(get_package_upgradable_security_count)
+
+cat >>/var/run/motd.dynamic<<EOF
+
+$total packages are installed.
+$upgrade packages can be updated.
+$security updates are security updates.
+EOF

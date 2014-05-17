@@ -1,0 +1,55 @@
+#!/bin/sh
+
+memInfo=$(cat /proc/meminfo)
+diskInfo=$(df -h)
+
+humanread(){
+local size=$1
+if [ $size -ge 1073741824 ];then
+    size=$(echo "scale=1;$size/1073741824"| bc)GB
+elif [ $size -ge 1048576 ];then
+    size=$(echo "scale=1;$size/1048576"| bc)MB
+elif [ $size -ge 1024 ];then
+    size=$(echo "scale=1;$size/1024" | bc)KB
+else
+    size=${size}B
+fi
+echo $size
+}
+
+get_mem_total(){
+echo "$memInfo" | grep MemTotal | awk '{print $2}'
+}
+
+get_mem_free(){
+echo "$memInfo" | grep MemFree | awk '{print $2}'
+}
+
+get_disk_total(){
+echo "$diskInfo" | grep /dev/root | awk '{print $2}'
+}
+
+get_disk_usage(){
+echo "$diskInfo" | grep /dev/root | awk '{print $5}'
+}
+
+memTotal=$(get_mem_total)
+memFree=$(get_mem_free)
+
+mem_info(){
+local percent=$(echo "scale=1;100-$memFree*100/$memTotal" | bc)
+echo "$percent% of $(humanread ${memTotal}000)"
+}
+
+disk_info(){
+local percent=$(get_disk_usage)
+echo "$percent of $(get_disk_total)"
+}
+
+cat >>/var/run/motd.dynamic<<EOF
+
+ System information as of $(date)
+
+ Memory usage: $(mem_info)
+ Usage of /:	$(disk_info)
+EOF

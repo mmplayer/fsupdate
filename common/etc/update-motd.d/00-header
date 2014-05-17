@@ -1,0 +1,2 @@
+#!/bin/sh
+printf "Welcome to %s (%s %s %s)\n" "Cubian" "$(uname -o)" "$(uname -r)" "$(uname -m)" > /var/run/motd.dynamic
