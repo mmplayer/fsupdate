@@ -12,6 +12,7 @@ GREEN_LED_BRIGHTNESS=${GREEN_LED}/brightness
 INTERFACE=${1:-unknown}
 ACTION=${2:-unknown}
 DELAY=${3:-0}
+LOCK=/var/lock/cubian-networklight
 
 log(){
 logger -t "networklight" "$1"
@@ -19,11 +20,16 @@ logger -t "networklight" "$1"
 
 log "triggered by $INTERFACE $ACTION"
 
+if [ -f $LOCK ];then
+	log "another process is running"
+	exit 3
+fi
+
 if [ ! -d $BLUE_LED ] || [ ! -d $GREEN_LED ];then
 	log "$0 execuate failed, led doesn't exists"
 	exit 2
 fi
-
+touch $LOCK
 echo -n 0 > ${BLUE_LED}/brightness
 log "wait interfaces ready, waiting $DELAY seconds"
 sleep $DELAY
@@ -60,5 +66,6 @@ else
     echo -n timer > ${BLUE_LED}/trigger
     log "all the interfaces are offline"
 fi
+rm -f $LOCK
 
 exit 0

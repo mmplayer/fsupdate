@@ -1,7 +1,7 @@
 #/bin/bash 
 DOT=.
 DASH=-
-LOCK="/var/lock/morsemsg"
+LOCK="/var/lock/cubian-morsemsg"
 BLUE_LED=/sys/class/leds/blue\:ph21\:led2/
 GREEN_LED=/sys/class/leds/green\:ph20\:led1/
 

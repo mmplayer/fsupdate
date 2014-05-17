@@ -9,7 +9,6 @@ LOCKFILE="/var/lock/cubian-ntpdate"
 INTERFACE=${1:-unknown}
 ACTION=${2:-unknown}
 DELAY=${3:-0}
-COUNT=1
 MAX_AVG=0.8
 
 if [ -f $LOCKFILE ];then
@@ -59,7 +58,7 @@ log "triggered by $INTERFACE $ACTION"
 log "wait interfaces ready"
 
 while true;do
-	DELAY=$(expr $DELAY \* $COUNT)
+	DELAY=$(expr $DELAY \* 2)
 	log "wait $DELAY seconds"
 	sleep $DELAY
 	set +e
@@ -69,6 +68,5 @@ while true;do
 	if [ -f $LOCKFILE ];then
 		break
 	fi
-	COUNT=$(expr $COUNT \* 2)
 done
 exit 0

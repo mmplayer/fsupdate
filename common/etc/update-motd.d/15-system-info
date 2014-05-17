@@ -52,4 +52,5 @@ cat >>/var/run/motd.dynamic<<EOF
 
  Memory usage: $(mem_info)
  Usage of /:	$(disk_info)
+
 EOF

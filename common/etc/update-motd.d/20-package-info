@@ -1,9 +1,14 @@
 #!/bin/sh
 
-N=/var/run/motd.package
-
-echo "/usr/lib/cubian/cubian-motd-package" | at now
+N=/etc/motd.package
+L=/var/lock/update-motd-package-info
 
 if [ -f $N ];then
-echo $N >> /var/run/motd.dynamic
+cat $N >> /var/run/motd.dynamic
+fi
+
+if [ ! -f $L ];then
+#this process is daemon
+echo "/usr/lib/cubian/cubian-motd-package" | at now 2>/dev/null
+touch $L
 fi
