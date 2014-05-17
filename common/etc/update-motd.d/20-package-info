@@ -1,0 +1,9 @@
+#!/bin/sh
+
+N=/var/run/motd.package
+
+echo "/usr/lib/cubian/cubian-motd-package" | at now
+
+if [ -f $N ];then
+echo $N >> /var/run/motd.dynamic
+fi

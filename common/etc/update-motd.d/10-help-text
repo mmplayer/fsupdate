@@ -1,0 +1,5 @@
+#!/bin/sh
+cat >>/var/run/motd.dynamic<<EOF
+
+ * Documentation:  http://cubian.org
+EOF
