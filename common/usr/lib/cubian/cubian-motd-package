@@ -63,7 +63,7 @@ EOF
   fi
   kernel=$(has_kernel_update)
   if [ $? -eq 0 ];then
-    echo " kernel is upgradable." >> $motd
+    echo " kernel can be updated." >> $motd
   else
     if [ -n "$kernel" ];then
         log "An error occured while running has_kernel_update"
