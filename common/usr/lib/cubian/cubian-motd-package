@@ -14,16 +14,20 @@ get_package_total_count(){
 dpkg --list | wc --lines 2>&1
 }
 
-get_package_upgradable_count(){
+get_package_updatable_count(){
 apt-get upgrade --just-print | grep Inst | wc --lines 2>&1
 }
 
-get_package_upgradable_security_count(){
+get_package_updatable_security_count(){
 apt-get upgrade --print-uris -y | grep security.debian.org | wc --lines 2>&1
 }
 
 has_kernel_update(){
 apt-get upgrade --just-print | grep linux-image 2>&1
+}
+
+run_update(){
+apt-get update 2>&1
 }
 
 postpone(){
@@ -36,51 +40,63 @@ generateMotdPackageInfo
 generateMotdPackageInfo(){
 log "Generate motd package info"
 local motd="/etc/motd.package"
-if ! cubian_loadavg_fine;then
-  log "System is busy, load average is higher than $CUBIAN_LOADAVG_TOLERACE"
-  postpone
-else
-  local total=$(get_package_total_count)
+if cubian_loadavg_fine;then
+  update_info=$(run_update)
   if [ $? -eq 0 ];then
-cat > $motd <<EOF
+    log "Run run_update"
+    total=$(get_package_total_count)
+    if [ $? -eq 0 ];then
+      cat > $motd <<EOF
  Until $(date)
 
  $total packages are installed.
 EOF
-  upgrade=$(get_package_upgradable_count)
-  if [ $? -eq 0 ];then
-    echo " $upgrade packages can be updated." >> $motd
-  else
-    log $upgrade
-    log "An error occured while running get_package_upgradable_count"
-  fi
-  security=$(get_package_upgradable_security_count)
-  if [ $? -eq 0 ];then
-    echo " $security updates are security updates." >> $motd
-  else
-    log $security
-    log "An error occured while running get_package_upgradable_security_count"
-  fi
-  kernel=$(has_kernel_update)
-  if [ $? -eq 0 ];then
-    echo " kernel can be updated." >> $motd
-  else
-    if [ -n "$kernel" ];then
-        log "An error occured while running has_kernel_update"
-        log $kernel
+      upgrade=$(get_package_updatable_count)
+      if [ $? -eq 0 ];then
+        echo " $upgrade packages can be updated." >> $motd
+      else
+        if [ -n "$upgrade" ];then
+          log $upgrade
+          log "An error occured while running get_package_updatable_count"
+		fi
+      fi
+      security=$(get_package_updatable_security_count)
+      if [ $? -eq 0 ];then
+        echo " $security updates are security updates." >> $motd
+      else
+        if [ -n "$security" ];then
+          log $security
+          log "An error occured while running get_package_updatable_security_count"
+		fi
+      fi
+      kernel=$(has_kernel_update)
+      if [ $? -eq 0 ];then
+        echo " kernel can be updated." >> $motd
+      else
+        if [ -n "$kernel" ];then
+            log "An error occured while running has_kernel_update"
+            log $kernel
+        fi
+      fi
+      echo "" >> $motd
+      POSTPONE_TIME=30
+      # trigger regerate motd
+      log "regerate motd"
+      run-parts /etc/update-motd.d/
+      log "success"
+    else
+      log $total
+      log "An error occured while running get_package_total_count"
+      postpone
     fi
-  fi
-  echo "" >> $motd
-  POSTPONE_TIME=30
-  # trigger regerate motd
-  log "regerate motd"
-  run-parts /etc/update-motd.d/
-  log "success"
   else
-    log $total
-    log "An error occured while running get_package_total_count"
-    postpone
+	log "$update_info"
+	log "An error occured while running run_update"
+	postpone
   fi
+else
+  log "System is busy, load average is higher than $CUBIAN_LOADAVG_TOLERACE"
+  postpone
 fi
 }
 
