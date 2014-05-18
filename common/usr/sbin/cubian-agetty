@@ -1,44 +1,5 @@
 #!/bin/bash
 
-screen_print(){
-printf "$1" > /dev/tty0
-}
-
-prompt_firstrun(){
-#clear terminal
-local ip=$(/usr/lib/cubian/cubian-getip)
-ip=${ip:-YOUR_IP_ADDRESS}
-screen_print "\033[2J\033[1;1H"
-screen_print "
- __    __   __      
-|  |  |  | |  |     
-|  |__|  | |  |     
-|   __   | |  |     
-|  |  |  | |  |  __ 
-|__|  |__| |__| (_ )
-                 |/"
-screen_print "\n"
-screen_print "\n"
-screen_print "1. Default username/password: cubie/cubie\n"
-screen_print "2. Default SSH port: 36000\n"
-screen_print "3. Web admin URL: https://${ip}:8000,Please login with root/admin\n"
-screen_print "4. Verbose boot: press Alt+F2\n"
-screen_print "5. Install to NAND: run \"sudo cubian-nandinstall\"\n"
-screen_print "6. For help: visit http://cubian.org\n"
-}
-
-if [ -f /root/.firstRun ];then
-prompt_firstrun
-rm /root/.firstRun
-if [ $1 = "tty2" ];then
-  # don't clean screen on tty2 Alt+F2
-  exec /sbin/agetty $@ --noclear
-else
-  exec /sbin/agetty $@ --noclear --login-pause
-fi
-exit 0
-fi
-
 if [ $1 = "tty2" ];then
   # don't clean screen on tty2 Alt+F2
   exec /sbin/agetty $@ --noclear
