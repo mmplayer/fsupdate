@@ -97,6 +97,7 @@ case "$1" in
 		/sbin/insserv -r cubian-firstrun
 		/usr/bin/touch /root/.firstRun
 		if $reboot;then
+			screen_print "\n"
 			screen_print "Rebooting, please wait...\n"
 			/sbin/reboot
 		fi
