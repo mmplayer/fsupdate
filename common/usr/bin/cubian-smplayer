@@ -1,0 +1,2 @@
+#!/bin/sh
+VDPAU_DRIVER=sunxi smplayer -config-path /etc/smplayer $@

@@ -1,0 +1,11 @@
+--- smplayer.desktop.original	2014-05-19 02:47:35.249696112 +0800
++++ smplayer.desktop	2014-05-19 02:48:03.693837154 +0800
+@@ -13,7 +13,7 @@ Comment[ru]=Мощный интерфе�
+ Comment[uk]=Потужний інтерфейс до MPlayer
+ Comment[eu]=MPlayerrentzako interfaze grafiko handi bat
+ Comment[zh_CN]=一个优秀的 MPlayer 前端
+-Exec=smplayer %U
++Exec=cubian-smplayer %U
+ GenericName=Media Player
+ GenericName[cs]=Přehrávač multimédií
+ GenericName[es]=Reproductor multimedia
