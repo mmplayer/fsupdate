@@ -53,29 +53,33 @@ if cubian_loadavg_fine;then
 EOF
       upgrade=$(get_package_updatable_count)
       if [ $? -eq 0 ];then
-        echo " $upgrade packages can be updated." >> $motd
+          if [ "$upgrade" = "0" ];then
+              echo " System is up to date." >> $motd
+          else
+              echo " $upgrade packages can be updated." >> $motd
+              security=$(get_package_updatable_security_count)
+              if [ $? -eq 0 ];then
+                echo " $security updates are security updates." >> $motd
+              else
+                if [ -n "$security" ];then
+                  log $security
+                  log "An error occured while running get_package_updatable_security_count"
+                fi
+              fi
+              kernel=$(has_kernel_update)
+              if [ $? -eq 0 ];then
+                echo " kernel can be updated." >> $motd
+              else
+                if [ -n "$kernel" ];then
+                    log "An error occured while running has_kernel_update"
+                    log $kernel
+                fi
+              fi
+          fi
       else
         if [ -n "$upgrade" ];then
           log $upgrade
           log "An error occured while running get_package_updatable_count"
-		fi
-      fi
-      security=$(get_package_updatable_security_count)
-      if [ $? -eq 0 ];then
-        echo " $security updates are security updates." >> $motd
-      else
-        if [ -n "$security" ];then
-          log $security
-          log "An error occured while running get_package_updatable_security_count"
-		fi
-      fi
-      kernel=$(has_kernel_update)
-      if [ $? -eq 0 ];then
-        echo " kernel can be updated." >> $motd
-      else
-        if [ -n "$kernel" ];then
-            log "An error occured while running has_kernel_update"
-            log $kernel
         fi
       fi
       echo "" >> $motd
@@ -90,9 +94,9 @@ EOF
       postpone
     fi
   else
-	log "$update_info"
-	log "An error occured while running run_update"
-	postpone
+    log "$update_info"
+    log "An error occured while running run_update"
+    postpone
   fi
 else
   log "System is busy, load average is higher than $CUBIAN_LOADAVG_TOLERACE"
