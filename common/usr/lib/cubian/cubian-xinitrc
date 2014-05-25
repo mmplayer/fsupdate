@@ -1,10 +1,21 @@
 #!/bin/sh
-DEFAULTSESSION=lxsession
+DEFAULTSESSION=startlxde
 # cover show once on session wide
 touch /var/lock/slim_disable_cover.lock
 if [ -f ~/.xinitrc ];then
- ~/.xinitrc $1
+ ~/.xinitrc $1 $2 $3 $4
 else
+
+bgsource="/usr/share/cubian/wallpaper/wallaper_${2}x${3}.png"
+bgdefault="/usr/share/cubian/wallpaper/wallaper_default.png"
+bgtarget="/usr/share/cubian/desktop-background"
+
+if [ -f $bgsource ];then
+    ln -sf $bgsource $bgtarget
+else
+    ln -sf $bgdefault $bgtarget
+fi
+
 case "$1" in
      openbox) exec openbox-session ;;
      xfce) exec xfce4-session ;;
