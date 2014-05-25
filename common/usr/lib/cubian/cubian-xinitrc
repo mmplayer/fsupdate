@@ -1,10 +1,7 @@
 #!/bin/sh
 DEFAULTSESSION=lxsession
-if [ -f /root/.firstRun ];then
-# cover show once on system wide
-rm -f /root/.firstRun
+# cover show once on session wide
 touch /var/lock/slim_disable_cover.lock
-fi
 if [ -f ~/.xinitrc ];then
  ~/.xinitrc $1
 else
