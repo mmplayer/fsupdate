@@ -1,6 +1,25 @@
---- slim.conf.original	2014-02-07 07:47:17.003459679 +0800
-+++ slim.conf	2014-02-07 07:47:47.707611941 +0800
-@@ -82,7 +82,7 @@ reboot_msg         The system is rebooti
+--- slim.conf.original	2014-05-26 00:43:14.514299777 +0800
++++ slim.conf	2014-05-26 00:48:18.759808468 +0800
+@@ -34,7 +34,7 @@ authfile           /var/run/slim.auth
+ # to adjust the command according to your preferred shell,
+ # i.e. for freebsd use:
+ # login_cmd           exec /bin/sh - ~/.xinitrc %session
+-login_cmd           exec /bin/bash -login /etc/X11/Xsession %session
++login_cmd             exec /bin/bash -login /usr/lib/cubian/cubian-xinitrc %session
+ 
+ # Commands executed when starting and exiting a session.
+ # They can be used for registering a X11 session with
+@@ -52,7 +52,8 @@ login_cmd           exec /bin/bash -logi
+ # The current chosen session name is replaced in the login_cmd
+ # above, so your login command can handle different sessions.
+ # see the xinitrc.sample file shipped with slim sources
+-sessions            default,startxfce4,openbox,ion3,icewm,wmaker,blackbox,awesome
++#sessions            default,startxfce4,openbox,ion3,icewm,wmaker,blackbox,awesome
++sessions            lxde
+ 
+ # Executed when pressing F11 (requires imagemagick)
+ screenshot_cmd      scrot /root/slim.png
+@@ -82,10 +83,11 @@ reboot_msg         The system is rebooti
  
  # current theme, use comma separated list to specify a set to 
  # randomly choose from
@@ -9,3 +28,7 @@
  
  # Lock file
  lockfile            /var/run/slim.lock
++coverlockfile       /var/lock/slim_disable_cover.lock
+ 
+ # Log file
+ logfile             /var/log/slim.log

@@ -1,0 +1,22 @@
+#!/bin/sh
+DEFAULTSESSION=lxsession
+if [ -f /root/.firstRun ];then
+# cover show once on system wide
+rm -f /root/.firstRun
+touch /var/lock/slim_disable_cover.lock
+fi
+if [ -f ~/.xinitrc ];then
+ ~/.xinitrc $1
+else
+case "$1" in
+     openbox) exec openbox-session ;;
+     xfce) exec xfce4-session ;;
+     gnome3) exec gnome-session ;;
+     kde) exec startkde ;;
+     cinnamon) exec gnome-session-cinnamon ;;
+     razor-qt) exec razor-session ;;
+     lxde) exec lxsession ;;
+     mate) exec mate-session ;;
+     *) exec $DEFAULTSESSION ;;
+esac
+fi
