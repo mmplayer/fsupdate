@@ -1,14 +1,14 @@
---- ntpdate	2014-05-29 23:34:21.348486425 +0800
-+++ ntpdate.original	2014-05-29 23:04:08.855498782 +0800
-@@ -4,11 +4,6 @@ set -e
+--- ntpdate.original	2014-05-30 00:46:33.653969185 +0800
++++ ntpdate	2014-05-30 00:47:31.534256188 +0800
+@@ -4,6 +4,11 @@ set -e
  
  PATH=/sbin:/bin:/usr/sbin:/usr/bin
  
--if [ -x /usr/sbin/cubian-ntpdate ]; then
--	echo "/usr/sbin/cubian-ntpdate 40" | at now
--fi
--
--exit 0
++if [ -x /usr/sbin/cubian-ntpdate ]; then
++	echo "/usr/sbin/cubian-ntpdate 40" | at now
++fi
++
++exit 0
  # This is a heuristic:  The idea is that if a static interface is brought
  # up, that is a major event, and we can put in some extra effort to fix
  # the system time.  Feel free to change this, especially if you regularly
