@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PATH=/bin:/usr/bin
 # remove firstRun sign
 if [ -f /root/.firstRun ];then
 	rm -f /root/.firstRun 
@@ -10,9 +11,16 @@ bgsource="/usr/share/cubian/wallpaper/wallpaper_${1}x${2}.png"
 bgdefault="/usr/share/cubian/wallpaper/wallpaper_default.png"
 bgtarget="/usr/share/cubian/desktop-background"
 
-if [ -f $bgsource ];then
-	ln -sf $bgsource $bgtarget
-else
-	ln -sf $bgdefault $bgtarget
+if [ ! -f $bgsource ];then
+	bgsource="$bgdefault"
 fi
 
+exist_bgsource=$(readlink $bgtarget)
+
+if [ $? -eq 0 ];then
+  if [ "$exist_bgsource" != "$bgsource" ];then
+  	ln -sf $bgsource $bgtarget
+  fi
+else
+  	ln -s $bgsource $bgtarget
+fi
