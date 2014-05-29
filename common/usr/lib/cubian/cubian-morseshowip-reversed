@@ -1,7 +1,7 @@
 #!/bin/bash
 ipaddr=`/usr/lib/cubian/cubian-getip`
 ipaddr_reversed=`echo $ipaddr | rev`
-lockfile='/var/lock/cubian-morsemsg'
+lockfile=/var/lock/cubian-morsemsg.lock
 if [ -n "$ipaddr" ];then
     if [ -f $lockfile ];then
         rm -f $lockfile

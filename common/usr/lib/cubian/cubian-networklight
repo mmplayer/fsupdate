@@ -9,16 +9,13 @@ BLUE_LED=/sys/class/leds/blue\:ph21\:led2/
 GREEN_LED=/sys/class/leds/green\:ph20\:led1/
 BLUE_LED_BRIGHTNESS=${BLUE_LED}/brightness
 GREEN_LED_BRIGHTNESS=${GREEN_LED}/brightness
-INTERFACE=${1:-unknown}
-ACTION=${2:-unknown}
-DELAY=${3:-0}
+DELAY=${1:-0}
 LOCK=/var/lock/cubian-networklight
 
 log(){
 logger -t "networklight" "$1"
 }
 
-log "triggered by $INTERFACE $ACTION"
 
 if [ -f $LOCK ];then
 	log "another process is running"

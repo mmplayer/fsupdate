@@ -5,10 +5,8 @@ set -e
 # this program is designed exec by at command, don't use STDOUT in the program
 # STDOUT,STDERROR will be mailed to /var/mail/
 
-LOCKFILE="/var/lock/cubian-ntpdate"
-INTERFACE=${1:-unknown}
-ACTION=${2:-unknown}
-DELAY=${3:-0}
+LOCKFILE=/var/lock/cubian-ntpdate.lock
+DELAY=${1:-0}
 MAX_AVG=0.8
 
 if [ -f $LOCKFILE ];then
@@ -39,7 +37,7 @@ if [[ "$hasNetWork" = "1" ]];then
 	if expr $avg \< $MAX_AVG > /dev/null;then
 		local ntpdateLog=$(/usr/sbin/ntpdate-debian 2>&1)
 		local ret="$?"
-		echo $ntpdateLog | logger -t "networktime"
+		printf $ntpdateLog | logger -t "networktime"
 		if [ "$ret" = "0" ];then
     	    log "success"
 			touch $LOCKFILE
@@ -54,7 +52,6 @@ else
 fi
 }
 
-log "triggered by $INTERFACE $ACTION"
 log "wait interfaces ready"
 
 while true;do
