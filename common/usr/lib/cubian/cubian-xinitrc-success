@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# remove firstRun sign
+if [ -f /root/.firstRun ];then
+	rm -f /root/.firstRun 
+fi
+
+# update wallpaper
+bgsource="/usr/share/cubian/wallpaper/wallpaper_${2}x${3}.png"
+bgdefault="/usr/share/cubian/wallpaper/wallpaper_default.png"
+bgtarget="/usr/share/cubian/desktop-background"
+
+if [ -f $bgsource ];then
+	ln -sf $bgsource $bgtarget
+else
+	ln -sf $bgdefault $bgtarget
+fi
+
