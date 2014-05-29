@@ -10,7 +10,7 @@ GREEN_LED=/sys/class/leds/green\:ph20\:led1/
 BLUE_LED_BRIGHTNESS=${BLUE_LED}/brightness
 GREEN_LED_BRIGHTNESS=${GREEN_LED}/brightness
 DELAY=${1:-0}
-LOCK=/var/lock/cubian-networklight
+LOCK=/var/lock/cubian-networklight.lock
 
 log(){
 logger -t "networklight" "$1"
@@ -18,21 +18,24 @@ logger -t "networklight" "$1"
 
 
 if [ -f $LOCK ];then
-	log "another process is running"
-	exit 3
+	exit 0
 fi
+
+echo $$ > $LOCK
+sleep 1
+
+[ "x$(cat $LOCK)" == "x"$$ ] || exit
 
 if [ ! -d $BLUE_LED ] || [ ! -d $GREEN_LED ];then
 	log "$0 execuate failed, led doesn't exists"
 	exit 2
 fi
-touch $LOCK
 echo -n 0 > ${BLUE_LED}/brightness
 log "wait interfaces ready, waiting $DELAY seconds"
 sleep $DELAY
 log "start probe interfaces"
 set +e
-for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*');do
+for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*\|p2p[0-9][0-9]*');do
     hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
     if [[ "$hasNetWork" = "1" ]];then
         log "network interface $interface online"
@@ -46,7 +49,7 @@ set -e
 if [[ "$hasNetWork" = "1" ]];then
     echo -n 0 > $BLUE_LED_BRIGHTNESS
     echo -n 0 > $GREEN_LED_BRIGHTNESS
-    log "wait 20 seconds let user prepare the pen"
+	log "Waiting IP address for 20 seconds"
     sleep 20
     #indicates the morse code start to begin
     echo -n 1 > $GREEN_LED_BRIGHTNESS
@@ -55,14 +58,20 @@ if [[ "$hasNetWork" = "1" ]];then
     echo -n 0 > $BLUE_LED_BRIGHTNESS
 
     sleep 3
-    log "start show ip address by morse code through led"
-    log "IP address `/usr/lib/cubian/cubian-getip`"
-    /etc/init.d/cubian-bootled start
-    /usr/lib/cubian/cubian-morseshowip-reversed
+	if [ "x`/usr/lib/cubian/cubian-getip`" = "x" ];then
+    	log "No IPv4 address available"
+    	echo -n timer > ${BLUE_LED}/trigger
+	else
+    	log "start show ip address by morse code through led"
+    	log "IP address `/usr/lib/cubian/cubian-getip`"
+    	/etc/init.d/cubian-bootled start
+    	/usr/lib/cubian/cubian-morseshowip-reversed
+	fi
 else
-    echo -n timer > ${BLUE_LED}/trigger
     log "all the interfaces are offline"
+    echo -n timer > ${BLUE_LED}/trigger
 fi
 rm -f $LOCK
+echo "Quit"
 
 exit 0
