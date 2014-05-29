@@ -6,7 +6,7 @@ if [ -f /root/.firstRun ];then
 fi
 
 # update wallpaper
-bgsource="/usr/share/cubian/wallpaper/wallpaper_${2}x${3}.png"
+bgsource="/usr/share/cubian/wallpaper/wallpaper_${1}x${2}.png"
 bgdefault="/usr/share/cubian/wallpaper/wallpaper_default.png"
 bgtarget="/usr/share/cubian/desktop-background"
 

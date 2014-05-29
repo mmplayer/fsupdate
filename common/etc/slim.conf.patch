@@ -9,7 +9,7 @@
 +
 +# This command is executed after a succesful login.
 +# it runs in root
-+login_success_cmd     exec /bin/bash /usr/lib/cubian/cubian-xinitrc-success %session %screen_width %screen_height %theme
++login_success_cmd     exec /bin/bash /usr/lib/cubian/cubian-xinitrc-success %screen_width %screen_height
  
  # Commands executed when starting and exiting a session.
  # They can be used for registering a X11 session with
