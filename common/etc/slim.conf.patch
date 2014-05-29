@@ -1,15 +1,19 @@
---- slim.conf.original	2014-05-26 00:43:14.514299777 +0800
-+++ slim.conf	2014-05-26 00:48:18.759808468 +0800
-@@ -34,7 +34,7 @@ authfile           /var/run/slim.auth
+--- slim.conf.original	2014-05-30 00:19:00.821773237 +0800
++++ slim.conf	2014-05-30 00:25:24.555676074 +0800
+@@ -34,7 +34,11 @@ authfile           /var/run/slim.auth
  # to adjust the command according to your preferred shell,
  # i.e. for freebsd use:
  # login_cmd           exec /bin/sh - ~/.xinitrc %session
 -login_cmd           exec /bin/bash -login /etc/X11/Xsession %session
 +login_cmd             exec /bin/bash -login /usr/lib/cubian/cubian-xinitrc %session %screen_width %screen_height %theme
++
++# This command is executed after a succesful login.
++# it runs in root
++login_success_cmd     exec /bin/bash /usr/lib/cubian/cubian-login-success %session %screen_width %screen_height %theme
  
  # Commands executed when starting and exiting a session.
  # They can be used for registering a X11 session with
-@@ -52,7 +52,8 @@ login_cmd           exec /bin/bash -logi
+@@ -52,7 +56,8 @@ login_cmd           exec /bin/bash -logi
  # The current chosen session name is replaced in the login_cmd
  # above, so your login command can handle different sessions.
  # see the xinitrc.sample file shipped with slim sources
@@ -19,7 +23,7 @@
  
  # Executed when pressing F11 (requires imagemagick)
  screenshot_cmd      scrot /root/slim.png
-@@ -82,10 +83,11 @@ reboot_msg         The system is rebooti
+@@ -82,10 +87,11 @@ reboot_msg         The system is rebooti
  
  # current theme, use comma separated list to specify a set to 
  # randomly choose from
