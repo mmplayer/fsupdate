@@ -7,7 +7,7 @@
 -wallpaper_mode=1
 -wallpaper=/etc/alternatives/desktop-background
 +wallpaper_mode=4
-+wallpaper=/usr/share/cubian/desktop-background
++wallpaper=/usr/share/images/cubian-desktop/desktop-background
  desktop_bg=#000000
  desktop_fg=#ffffff
  desktop_shadow=#000000
