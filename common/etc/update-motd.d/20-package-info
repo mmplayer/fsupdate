@@ -9,6 +9,6 @@ fi
 
 if [ ! -f $L ];then
 #this process is daemon
-echo "/usr/lib/cubian/cubian-motd-package" | at now 2>/dev/null
+echo "/usr/lib/cubian/cubian-motd-package" | at now + 30 min 2>/dev/null
 touch $L
 fi
