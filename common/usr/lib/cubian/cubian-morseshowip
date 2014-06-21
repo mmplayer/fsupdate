@@ -5,5 +5,5 @@ if [ "$ipaddr" != '' ];then
     if [ -f $lockfile ];then
         rm -f $lockfile
     fi
-    /usr/lib/cubian/cubian-morsemsg $ipaddr
+    /bin/bash /usr/lib/cubian/cubian-morsemsg $ipaddr
 fi
