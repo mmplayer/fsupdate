@@ -5,6 +5,6 @@ set -e
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 if [ -x /usr/lib/cubian/cubian-networklight ];then
-	echo "/usr/lib/cubian/cubian-networklight 10" | at now
+	echo "/usr/lib/cubian/cubian-networklight 10" | at now 2>/dev/null
 fi
 exit 0
