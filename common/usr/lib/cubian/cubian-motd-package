@@ -58,7 +58,7 @@ EOF
           else
               echo " $upgrade packages can be updated." >> $motd
               security=$(get_package_updatable_security_count)
-              if [ $? -eq 0 ];then
+              if [ $? -eq 0 ] && [ "$security" != "0" ];then
                 echo " $security updates are security updates." >> $motd
               else
                 if [ -n "$security" ];then
