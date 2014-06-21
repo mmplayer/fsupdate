@@ -6,5 +6,5 @@ if [ -n "$ipaddr" ];then
     if [ -f $lockfile ];then
         rm -f $lockfile
     fi
-    /usr/lib/cubian/cubian-morsemsg $ipaddr_reversed
+    /bin/bash /usr/lib/cubian/cubian-morsemsg $ipaddr_reversed
 fi
