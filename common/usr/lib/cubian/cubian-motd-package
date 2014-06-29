@@ -104,6 +104,8 @@ else
 fi
 }
 
+# wait an hour
+sleep 3600
 while true;do
 log "Start check motd package info"
 generateMotdPackageInfo
