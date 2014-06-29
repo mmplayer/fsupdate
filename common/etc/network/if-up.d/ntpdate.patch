@@ -5,7 +5,7 @@
  PATH=/sbin:/bin:/usr/sbin:/usr/bin
  
 +if [ -x /usr/sbin/cubian-ntpdate ]; then
-+	echo "/usr/sbin/cubian-ntpdate 40" | at now 2>/dev/null
++	echo "/usr/sbin/cubian-ntpdate 30" | at now 2>/dev/null
 +fi
 +
 +exit 0

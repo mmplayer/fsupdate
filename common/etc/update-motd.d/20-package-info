@@ -9,6 +9,7 @@ fi
 
 if [ ! -f $L ];then
 #this process is daemon
-echo "/usr/lib/cubian/cubian-motd-package" | at now + 30 min 2>/dev/null
+#since cubieboard don't have rtc, use network timing instead, the time delay is not working actually, the command will execute once the ntpdate is successfull
+echo "/usr/lib/cubian/cubian-motd-package" | at now + 5 min 2>/dev/null
 touch $L
 fi
