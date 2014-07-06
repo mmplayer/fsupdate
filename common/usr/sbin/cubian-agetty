@@ -25,7 +25,7 @@ if [ -f /root/.firstRun ];then
   if is_server;then
     exec /sbin/agetty $@ --noclear --login-pause
   else
-    exec /sbin/agetty -n -l /usr/sbin/cubian-config $@
+    exec /sbin/agetty -n -l /usr/sbin/cubian-config-first $@
   fi
   exit 0
 fi
