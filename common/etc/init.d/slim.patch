@@ -1,0 +1,12 @@
+--- slim.original	2014-05-26 00:50:49.048553678 +0800
++++ slim	2014-05-26 00:50:26.228440506 +0800
+@@ -26,6 +26,9 @@ SSD_STOP_ARGS="--pidfile $PIDFILE --name
+ 
+ case $1 in
+   start)
++    if [ -f /root/.firstRun ];then
++        SSD_START_ARGS="${SSD_START_ARGS} -c"
++    fi
+     if [ "$HEED_DEFAULT_DISPLAY_MANAGER" = "true" ] &&
+        [ -e $DEFAULT_DISPLAY_MANAGER_FILE ] &&
+        [ "$(cat $DEFAULT_DISPLAY_MANAGER_FILE)" != "$DAEMON" ]; then
