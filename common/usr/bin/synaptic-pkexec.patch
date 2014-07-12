@@ -3,4 +3,4 @@
 @@ -1,2 +1,2 @@
  #!/bin/sh
 -pkexec "/usr/sbin/synaptic" "$@"
-+gksu -S -m "Type `whoami`'s password" "/usr/sbin/synaptic" "$@"
++nohup pkexec "/usr/sbin/synaptic" "$@" >/dev/null 2>&1
