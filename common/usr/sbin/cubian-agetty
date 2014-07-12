@@ -11,6 +11,11 @@ is_server(){
 	return 0
 }
 
+
+if is_server;then
+	exit 0
+fi
+
 if [ "$1" = "tty2" ];then
     # don't clean screen on tty2 Alt+F2
     exec /sbin/agetty $@ --noclear
@@ -29,5 +34,3 @@ if [ -f /root/.firstRun ];then
   fi
   exit 0
 fi
-
-exec /sbin/agetty $@
