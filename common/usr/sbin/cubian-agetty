@@ -34,3 +34,5 @@ if [ -f /root/.firstRun ];then
   fi
   exit 0
 fi
+
+exec /sbin/agetty $@
