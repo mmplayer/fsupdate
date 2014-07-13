@@ -22,7 +22,7 @@
 +
 +# This command is executed when execute when using "slim -c".
 +# it runs in root
-+prelogin_cmd          /usr/bin/xterm -maximized -C -fg white -bg black +sb -T "Cubian Config" -e /bin/bash -c "/usr/sbin/cubian-config"
++prelogin_cmd          /usr/bin/xterm -maximized -C -fg white -bg black +sb -T "Cubian Config" -e /bin/bash -c "if [ -f /root/.firstRun ];then /usr/sbin/cubian-config; fi"
  
  # Commands executed when starting and exiting a session.
  # They can be used for registering a X11 session with
