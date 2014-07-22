@@ -20,7 +20,7 @@ case "$1" in
 	for cpu in $(ls /sys/devices/system/cpu/ | grep 'cpu[0-9][0-9]*');do
 	  echo -n performance > /sys/devices/system/cpu/${cpu}/cpufreq/scaling_governor
 	  echo -n 1056000 > /sys/devices/system/cpu/${cpu}/cpufreq/scaling_max_freq
-	  echo -n 624000 > /sys/devices/system/cpu/${cpu}/cpufreq/scaling_min_freq
+	  echo -n 648000 > /sys/devices/system/cpu/${cpu}/cpufreq/scaling_min_freq
 	done
 
 	;;
