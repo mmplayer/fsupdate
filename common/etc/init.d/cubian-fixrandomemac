@@ -8,7 +8,7 @@
 # X-Start-Before:    $networking
 # Default-Start:     S    
 # Default-Stop:
-# Short-Description: Fix random emach on cubieboard
+# Short-Description: Fix random emac on cubieboard
 # Description:       Always respect the emac which is setted by script.bin
 #                    Otherwise generate a mac address to be used every time
 #
@@ -29,16 +29,23 @@ CUBIAN_EMAC="/root/.cubian-emac"
 IF="eth0"
 HAS_SUNXI_EMAC=
 EMAC=
+FEX_CONTENT=
+BIN2FEX="/usr/bin/bin2fex"
+FEX2BIN="/usr/bin/fex2bin"
 
 if [ -f $SCRIPT_BIN ];then
-	bin2fex $SCRIPT_BIN 2>/dev/null | grep -qi "^\s*MAC\s*=" && \
-	HAS_SUNXI_EMAC=true || HAS_SUNXI_EMAC=false
+	FEX_CONTENT=$($BIN2FEX $SCRIPT_BIN 2>/dev/null)
+	if grep -qi "^\s*MAC\s*=" <<< "$FEX_CONTENT";then
+		HAS_SUNXI_EMAC=true
+	else
+		HAS_SUNXI_EMAC=false
+	fi
 else
 	echo "$N warning: script.bin not found"
 	HAS_SUNXI_EMAC=false
 fi
 
-setEmac(){
+genEmac(){
 if [ ! -f $CUBIAN_EMAC ];then
 randemac="c0:b0$(hexdump -n4 -e '/1 ":%02x"' /dev/random)"
 echo "$N generate mac address $emac to $CUBIAN_EMAC"
@@ -54,13 +61,22 @@ fi
 case "$1" in
   start)
 	    if ! $HAS_SUNXI_EMAC;then
-			setEmac
+			genEmac
 			set +e
 			echo "$N set mac address $EMAC on ${IF}"
-			/sbin/ifconfig $IF hw ether $EMAC
+			output=$(/sbin/ifconfig $IF hw ether $EMAC 2>&1)
 			if [ "$?" != "0" ];then
-				echo "$N error: invalid mac address format? check file $CUBIAN_EMAC"
+				echo $output
+				if grep -qi "Device or resource busy" <<< "$output";then
+					echo "$N warning: $IF is up at the moment, might be a nfs booting"
+				else
+					echo "$N error: invalid mac address format? check file $CUBIAN_EMAC"
+					exit 2
+				fi
 			fi
+			set -e
+			echo "$N save emac setting to script.bin"
+			echo -e "$FEX_CONTENT\n\n[dynamic]\nMAC=\"$EMAC\"" | $FEX2BIN > $SCRIPT_BIN
 		fi
         ;;
   *)
