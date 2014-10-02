@@ -1,0 +1,7 @@
+#!/bin/sh
+/usr/sbin/cubian-config
+/usr/bin/clear
+if [ -f /root/.firstRun ];then
+	/bin/rm /root/.firstRun
+fi
+/bin/login

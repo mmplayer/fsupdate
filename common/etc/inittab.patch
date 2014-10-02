@@ -1,0 +1,21 @@
+--- /home/michal/CubieDebian/rootfs/argon-armfs/etc/inittab	2013-07-18 13:34:56.000000000 +0800
++++ etc/inittab	2014-10-03 05:47:47.871660511 +0800
+@@ -51,12 +51,12 @@ po::powerokwait:/etc/init.d/powerfail st
+ # Note that on most Debian systems tty7 is used by the X Window System,
+ # so if you want to add more getty's go ahead but skip tty7 if you run X.
+ #
+-1:2345:respawn:/sbin/getty 38400 tty1
+-2:23:respawn:/sbin/getty 38400 tty2
+-3:23:respawn:/sbin/getty 38400 tty3
+-4:23:respawn:/sbin/getty 38400 tty4
+-5:23:respawn:/sbin/getty 38400 tty5
+-6:23:respawn:/sbin/getty 38400 tty6
++1:2345:respawn:/usr/sbin/cubian-agetty tty1 38400
++2:23:respawn:/usr/sbin/cubian-agetty tty2 38400  
++3:23:respawn:/usr/sbin/cubian-agetty tty3 38400 
++4:23:respawn:/usr/sbin/cubian-agetty tty4 38400 
++5:23:respawn:/usr/sbin/cubian-agetty tty5 38400 
++6:23:respawn:/usr/sbin/cubian-agetty tty6 38400 
+ 
+ # Example how to put a getty on a serial line (for a terminal)
+ #

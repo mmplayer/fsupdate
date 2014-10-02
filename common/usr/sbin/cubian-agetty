@@ -26,11 +26,14 @@ if [ -f /root/.firstRun ];then
   # clear screen
   screen_print "\033[2J\033[1;1H"
   # remove first run flag
-  rm /root/.firstRun
   if is_server;then
+	if [ -f /root/.firstRun ];then
+		/bin/rm /root/.firstRun
+	fi
     exec /sbin/agetty $@ --noclear --login-pause
   else
-    exec /sbin/agetty -n -l /usr/sbin/cubian-config $@
+	# agetty commands must in one single file
+    exec /sbin/agetty -n -l /usr/sbin/cubian-config-login $@
   fi
   exit 0
 fi
