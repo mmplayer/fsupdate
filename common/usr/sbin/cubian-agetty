@@ -22,9 +22,7 @@ if [ -f /root/.firstRun ];then
   screen_print "\033[2J\033[1;1H"
   # remove first run flag
   if is_server;then
-	if [ -f /root/.firstRun ];then
-		/bin/rm /root/.firstRun
-	fi
+	/bin/rm /root/.firstRun 2>/dev/null
     exec /sbin/agetty $@ --noclear --login-pause
   else
 	# agetty commands must in one single file
