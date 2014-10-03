@@ -75,8 +75,10 @@ case "$1" in
 				fi
 			fi
 			set -e
-			echo "$N save emac setting to script.bin"
-			echo -e "$FEX_CONTENT\n\n[dynamic]\nMAC=\"$EMAC\"" | $FEX2BIN > $SCRIPT_BIN
+			if [ -f $SCRIPT_BIN ];then
+				echo "$N save emac setting to script.bin"
+				echo -e "$FEX_CONTENT\n\n[dynamic]\nMAC=\"$EMAC\"" | $FEX2BIN > $SCRIPT_BIN
+			fi
 		fi
         ;;
   *)

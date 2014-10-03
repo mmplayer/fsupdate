@@ -36,10 +36,6 @@ do_expand_rootfs(){
 		log "Failed to expand rootfs, must be run on a SD card"
 		return 1
 	fi
-	if [ "$part_num" -ne "1" ];then
-		log "Failed to expand rootfs, customed partition table is not supported"
-		return 2
-	fi
 	last_part_num=$(/sbin/parted ${device} -ms unit s p | tail -n 1 | cut -f 1 -d:)
 	if [ "$last_part_num" != "$part_num" ];then
 		log "Failed to expand rootfs, /dev/root is not the last partition"
@@ -81,6 +77,7 @@ case "$1" in
 		/usr/bin/ajenti-ssl-gen `/bin/hostname` -f
 		screen_print "........ok\n"
 		sleep 1
+		if [ -b "/dev/mmcblk0" ];then
 		set +e
 		screen_print " * Expanding file system to fit your SD-card"
 		log "Expanding rootfs..."
@@ -94,6 +91,7 @@ case "$1" in
 			screen_print "........fail\n"
 		fi
 		set -e
+		fi
 		/sbin/insserv -r cubian-firstrun
 		/usr/bin/touch /root/.firstRun
 		if $reboot;then
