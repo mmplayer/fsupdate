@@ -69,6 +69,11 @@ if [ -f $LOCKFILE ];then
 	exit 0
 fi
 
+# check for installed ntpd
+if [ -f /etc/init.d/ntp ];then
+	exit 0
+fi
+
 echo $$ > $LOCKFILE
 sleep 1
 [ "x$(cat $LOCKFILE)" == "x"$$ ] || exit
