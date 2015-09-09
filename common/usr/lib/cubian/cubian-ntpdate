@@ -2,7 +2,8 @@
 set -e
 
 # Warning:
-# this program is designed exec by at command, don't use STDOUT in the program
+# this program is designed to be executed by at command,
+# don't use STDOUT in the program
 # STDOUT,STDERROR will be mailed to /var/mail/
 
 LOCKFILE=/var/lock/cubian-ntpdate.lock
@@ -10,7 +11,66 @@ SUCCESS_LOCKFILE=/var/lock/cubian-ntpdate-success.lock
 DELAY=${1:-0}
 MAX_AVG=0.8
 
+
+# definition of some helper functions
+
+log(){
+  logger -t "networktime" "$1"
+}
+
+get_loadavg(){
+  cat /proc/loadavg | awk '{print $1}'
+}
+
+do_ntpdate(){
+  log "start probe interfaces"
+  for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*\|p2p[0-9][0-9]*');do
+      hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
+      if [[ "$hasNetWork" = "1" ]];then
+          log "network interface $interface online"
+          break
+      else
+          log "network interface $interface offline"
+      fi
+  done
+  log "Waiting IP address for 20 seconds"
+  sleep 20
+  if [ "x`/usr/lib/cubian/cubian-getip`" = "x" ];then
+  	log "No IPv4 address available"
+  	rm $LOCKFILE
+  	log "Quit"
+  	exit 0
+  fi
+  if [[ "$hasNetWork" = "1" ]];then
+  	avg=$(get_loadavg)
+  	if expr $avg \< $MAX_AVG > /dev/null;then
+  		ntpdateLog=$(/usr/sbin/ntpdate-debian 2>&1)
+  		ret="$?"
+  		echo $ntpdateLog | logger -t "networktime"
+  		if [ "$ret" = "0" ];then
+      	    log "success"
+  			touch $SUCCESS_LOCKFILE
+  		else
+      	    log "fail, ntpdate error, see log, process deferred"
+  		fi
+  	else
+      	log "system is busy, current $avg maximium $MAX_AVG, process deferred"
+  	fi
+  else
+      log "fail, no network connection, process deferred"
+  fi
+}
+
+
+## core logic of this script
+
+# check for already running instance
 if [ -f $LOCKFILE ];then
+	exit 0
+fi
+
+# check for installed ntpd
+if [ -f /etc/init.d/ntp ];then
 	exit 0
 fi
 
@@ -21,53 +81,6 @@ sleep 1
 if [ -f $SUCCESS_LOCKFILE ];then
 	log "already update time, quit automatically"
 fi
-
-log(){
-logger -t "networktime" "$1"
-}
-
-get_loadavg(){
-cat /proc/loadavg | awk '{print $1}'
-}
-
-do_ntpdate(){
-log "start probe interfaces"
-for interface in $(ls /sys/class/net/ | grep -v 'lo\|tunl[0-9][0-9]*\|gre[0-9][0-9]*\|ip6tnl[0-9][0-9]*\|sit[0-9][0-9]*\|p2p[0-9][0-9]*');do
-    hasNetWork=$(cat /sys/class/net/$interface/carrier 2>/dev/null)
-    if [[ "$hasNetWork" = "1" ]];then
-        log "network interface $interface online"
-        break
-    else
-        log "network interface $interface offline"
-    fi
-done
-log "Waiting IP address for 20 seconds"
-sleep 20
-if [ "x`/usr/lib/cubian/cubian-getip`" = "x" ];then
-	log "No IPv4 address available"
-	rm $LOCKFILE
-	log "Quit"
-	exit 0
-fi
-if [[ "$hasNetWork" = "1" ]];then
-	avg=$(get_loadavg)
-	if expr $avg \< $MAX_AVG > /dev/null;then
-		ntpdateLog=$(/usr/sbin/ntpdate-debian 2>&1)
-		ret="$?"
-		echo $ntpdateLog | logger -t "networktime"
-		if [ "$ret" = "0" ];then
-    	    log "success"
-			touch $SUCCESS_LOCKFILE
-		else
-    	    log "fail, ntpdate error, see log, process deferred"
-		fi
-	else
-    	log "system is busy, current $avg maximium $MAX_AVG, process deferred"
-	fi
-else
-    log "fail, no network connection, process deferred"
-fi
-}
 
 log "wait interfaces ready"
 

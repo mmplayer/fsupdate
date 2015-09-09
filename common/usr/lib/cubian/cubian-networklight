@@ -2,7 +2,8 @@
 set -e
 
 # Warning:
-# this program is designed exec by at command, don't use STDOUT in the program
+# this program is designed to be executed by at command,
+# don't use STDOUT in the program
 # STDOUT,STDERROR will be mailed to /var/mail/
 
 BLUE_LED=/sys/class/leds/blue\:ph21\:led2/
@@ -72,6 +73,6 @@ else
     echo -n timer > ${BLUE_LED}/trigger
 fi
 rm -f $LOCK
-echo "Quit"
+log "Quit"
 
 exit 0
